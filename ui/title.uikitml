@@ -1,19 +1,30 @@
 <style>
-  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ffff; border-width: 0.12; border-radius: 2; gap: 1.2; width: 52; }
+  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ffff; border-width: 0.12; border-radius: 2; gap: 1; width: 52; }
   .title { font-size: 5; color: #00ffff; font-weight: bold; }
-  .sub { font-size: 1.8; color: #668888; margin-bottom: 0.5; }
-  .info { font-size: 1.4; color: #448888; margin-bottom: 0.5; }
+  .sub { font-size: 1.8; color: #668888; }
+  .lvl-row { display: flex; flex-direction: row; align-items: center; gap: 2; margin-bottom: 0.5; }
+  .lvl-badge { font-size: 2; color: #ffaa00; font-weight: bold; background-color: rgba(255, 170, 0, 0.1); border-color: #664400; border-width: 0.06; border-radius: 0.8; padding: 0.4; padding-left: 1.5; padding-right: 1.5; }
+  .xp-text { font-size: 1.3; color: #668888; }
   .btn { font-size: 2; color: #ffffff; background-color: rgba(0, 255, 255, 0.08); border-color: #006666; border-width: 0.06; border-radius: 1; padding: 0.8; padding-left: 4; padding-right: 4; cursor: pointer; width: 80%; text-align: center; }
+  .btn-row { display: flex; flex-direction: row; gap: 1; width: 80%; }
+  .btn-half { font-size: 1.6; color: #ffffff; background-color: rgba(0, 255, 255, 0.08); border-color: #006666; border-width: 0.06; border-radius: 1; padding: 0.6; padding-left: 2; padding-right: 2; cursor: pointer; width: 49%; text-align: center; }
 </style>
 <div class="panel">
   <span class="title">NEON GRAVITY</span>
   <span class="sub">Gravity Well Puzzle</span>
-  <span id="level-info" class="info">Level 1 - 0 XP</span>
+  <div class="lvl-row">
+    <span id="lvl-badge" class="lvl-badge">LVL 1</span>
+    <span id="xp-text" class="xp-text">0 / 100 XP</span>
+  </div>
   <button id="btn-play" class="btn" cursor="pointer">PLAY</button>
   <button id="btn-scores" class="btn" cursor="pointer">LEADERBOARD</button>
-  <button id="btn-achv" class="btn" cursor="pointer">ACHIEVEMENTS</button>
-  <button id="btn-stats" class="btn" cursor="pointer">STATISTICS</button>
-  <button id="btn-skins" class="btn" cursor="pointer">SKINS</button>
-  <button id="btn-settings" class="btn" cursor="pointer">SETTINGS</button>
+  <div class="btn-row">
+    <button id="btn-achv" class="btn-half" cursor="pointer">ACHIEVEMENTS</button>
+    <button id="btn-stats" class="btn-half" cursor="pointer">STATISTICS</button>
+  </div>
+  <div class="btn-row">
+    <button id="btn-skins" class="btn-half" cursor="pointer">SKINS</button>
+    <button id="btn-settings" class="btn-half" cursor="pointer">SETTINGS</button>
+  </div>
   <button id="btn-help" class="btn" cursor="pointer">HOW TO PLAY</button>
 </div>

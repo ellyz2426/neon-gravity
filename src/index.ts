@@ -327,6 +327,208 @@ class AudioEngine {
   ambient() { this.playTone(55, 2, 'sine', 0.05); this.playTone(82.5, 2, 'sine', 0.04); }
 }
 
+// ─── Particle Burst FX ──────────────────────────────────────────────
+interface BurstParticle {
+  mesh: Mesh;
+  vx: number; vy: number; vz: number;
+  life: number; maxLife: number;
+}
+
+class ParticleFX {
+  private particles: BurstParticle[] = [];
+  private scene: any;
+  private pool: Mesh[] = [];
+  private poolIdx = 0;
+  private readonly POOL_SIZE = 200;
+  private geo = new SphereGeometry(0.04, 4, 4);
+
+  init(scene: any) {
+    this.scene = scene;
+    for (let i = 0; i < this.POOL_SIZE; i++) {
+      const m = new Mesh(this.geo, new MeshBasicMaterial({ color: new Color('#ffffff'), transparent: true, opacity: 1, blending: AdditiveBlending }));
+      m.visible = false;
+      scene.add(m);
+      this.pool.push(m);
+    }
+  }
+
+  private getMesh(): Mesh | null {
+    for (let i = 0; i < this.POOL_SIZE; i++) {
+      const idx = (this.poolIdx + i) % this.POOL_SIZE;
+      if (!this.pool[idx].visible) {
+        this.poolIdx = (idx + 1) % this.POOL_SIZE;
+        return this.pool[idx];
+      }
+    }
+    return null;
+  }
+
+  burst(x: number, y: number, z: number, color: string, count: number, speed = 3, life = 0.6) {
+    const col = new Color(color);
+    for (let i = 0; i < count; i++) {
+      const mesh = this.getMesh();
+      if (!mesh) break;
+      (mesh.material as MeshBasicMaterial).color.copy(col);
+      (mesh.material as MeshBasicMaterial).opacity = 1;
+      mesh.position.set(x, y, z);
+      mesh.scale.set(1, 1, 1);
+      mesh.visible = true;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.random() * Math.PI - Math.PI / 2;
+      const sp = speed * (0.5 + Math.random() * 0.5);
+      this.particles.push({
+        mesh,
+        vx: Math.cos(theta) * Math.cos(phi) * sp,
+        vy: Math.sin(phi) * sp + 1,
+        vz: Math.sin(theta) * Math.cos(phi) * sp,
+        life: life * (0.7 + Math.random() * 0.3),
+        maxLife: life,
+      });
+    }
+  }
+
+  ring(x: number, y: number, z: number, color: string, radius: number, count: number) {
+    const col = new Color(color);
+    for (let i = 0; i < count; i++) {
+      const mesh = this.getMesh();
+      if (!mesh) break;
+      (mesh.material as MeshBasicMaterial).color.copy(col);
+      (mesh.material as MeshBasicMaterial).opacity = 1;
+      const angle = (i / count) * Math.PI * 2;
+      mesh.position.set(x + Math.cos(angle) * radius, y, z + Math.sin(angle) * radius);
+      mesh.scale.set(1.5, 1.5, 1.5);
+      mesh.visible = true;
+      this.particles.push({
+        mesh,
+        vx: Math.cos(angle) * 2,
+        vy: 1.5,
+        vz: Math.sin(angle) * 2,
+        life: 0.8,
+        maxLife: 0.8,
+      });
+    }
+  }
+
+  update(delta: number) {
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i];
+      p.life -= delta;
+      if (p.life <= 0) {
+        p.mesh.visible = false;
+        this.particles.splice(i, 1);
+        continue;
+      }
+      p.vy -= 3 * delta; // gravity
+      p.mesh.position.x += p.vx * delta;
+      p.mesh.position.y += p.vy * delta;
+      p.mesh.position.z += p.vz * delta;
+      const t = p.life / p.maxLife;
+      (p.mesh.material as MeshBasicMaterial).opacity = t;
+      p.mesh.scale.setScalar(t * 1.2);
+    }
+  }
+}
+
+// ─── Starfield Background ───────────────────────────────────────────
+class Starfield {
+  private stars: Mesh[] = [];
+  private velocities: { vx: number; vy: number; vz: number }[] = [];
+  private geo = new SphereGeometry(0.02, 3, 3);
+
+  init(scene: any, count = 120) {
+    const mat = new MeshBasicMaterial({ color: new Color('#ffffff'), transparent: true, opacity: 0.3 });
+    for (let i = 0; i < count; i++) {
+      const m = new Mesh(this.geo, mat.clone());
+      const x = (Math.random() - 0.5) * 30;
+      const y = 3 + Math.random() * 15;
+      const z = (Math.random() - 0.5) * 30;
+      m.position.set(x, y, z);
+      m.scale.setScalar(0.5 + Math.random() * 1.5);
+      (m.material as MeshBasicMaterial).opacity = 0.1 + Math.random() * 0.25;
+      scene.add(m);
+      this.stars.push(m);
+      this.velocities.push({
+        vx: (Math.random() - 0.5) * 0.1,
+        vy: -0.05 - Math.random() * 0.1,
+        vz: (Math.random() - 0.5) * 0.1,
+      });
+    }
+  }
+
+  update(delta: number) {
+    for (let i = 0; i < this.stars.length; i++) {
+      const s = this.stars[i];
+      const v = this.velocities[i];
+      s.position.x += v.vx * delta;
+      s.position.y += v.vy * delta;
+      s.position.z += v.vz * delta;
+      // Twinkle
+      (s.material as MeshBasicMaterial).opacity = 0.1 + Math.abs(Math.sin(s.position.y * 2 + i * 0.5)) * 0.25;
+      // Wrap
+      if (s.position.y < 2) {
+        s.position.y = 18;
+        s.position.x = (Math.random() - 0.5) * 30;
+        s.position.z = (Math.random() - 0.5) * 30;
+      }
+    }
+  }
+}
+
+// ─── Ghost Well Preview ─────────────────────────────────────────────
+class GhostWell {
+  mesh: Mesh;
+  glow: Mesh;
+  ring: Mesh;
+  visible = false;
+
+  constructor() {
+    this.mesh = new Mesh(
+      new SphereGeometry(WELL_R, 16, 16),
+      new MeshStandardMaterial({ color: new Color('#00ffff'), emissive: new Color('#00ffff'), emissiveIntensity: 0.3, transparent: true, opacity: 0.35 })
+    );
+    this.glow = new Mesh(
+      new SphereGeometry(WELL_R * 1.8, 16, 16),
+      new MeshBasicMaterial({ color: new Color('#00ffff'), transparent: true, opacity: 0.08, blending: AdditiveBlending })
+    );
+    this.ring = new Mesh(
+      new TorusGeometry(0.4, 0.015, 8, 32),
+      new MeshBasicMaterial({ color: new Color('#00ffff'), transparent: true, opacity: 0.15 })
+    );
+    this.ring.rotation.x = Math.PI / 2;
+    this.hide();
+  }
+
+  addToScene(scene: any) {
+    scene.add(this.mesh);
+    scene.add(this.glow);
+    scene.add(this.ring);
+  }
+
+  update(x: number, z: number, type: WellType, strength: number, theme: ThemeDef) {
+    const col = type === 'attractor' ? theme.attractor : theme.repulsor;
+    (this.mesh.material as MeshStandardMaterial).color.set(col);
+    (this.mesh.material as MeshStandardMaterial).emissive.set(col);
+    (this.glow.material as MeshBasicMaterial).color.set(col);
+    (this.ring.material as MeshBasicMaterial).color.set(col);
+    const ringR = 0.3 + strength * 0.08;
+    this.ring.scale.setScalar(ringR / 0.4);
+    this.mesh.position.set(x, 0.2, z);
+    this.glow.position.set(x, 0.2, z);
+    this.ring.position.set(x, 0.05, z);
+    this.mesh.visible = true;
+    this.glow.visible = true;
+    this.ring.visible = true;
+    this.visible = true;
+  }
+
+  hide() {
+    this.mesh.visible = false;
+    this.glow.visible = false;
+    this.ring.visible = false;
+    this.visible = false;
+  }
+}
+
 // ─── GameManager ────────────────────────────────────────────────────
 class GameManager {
   state: GameState = 'title';
@@ -401,10 +603,27 @@ class GameManager {
 
   audio = new AudioEngine();
   scene: any = null;
+  fx = new ParticleFX();
+  starfield = new Starfield();
+  ghostWell = new GhostWell();
+
+  // Camera tracking
+  camTargetX = 0;
+  camTargetZ = 0;
+  camSmoothing = 3;
+  camOffsetY = 12;
+  camOffsetZ = 5;
+  cameraFollowEnabled = true;
+
+  // Level unlock
+  highestUnlockedLevel = 0;
 
   get theme(): ThemeDef { return THEMES[this.themeIdx]; }
   get skin(): SkinDef { return SKINS[this.skinIdx]; }
   get currentLevelDef(): LevelDef { return LEVELS[this.currentLevel] || LEVELS[0]; }
+
+  getPlayerLevel(): number { return Math.floor(this.totalXP / 100) + 1; }
+  getPlayerXPProgress(): number { return this.totalXP % 100; }
 
   getDifficultyMod(): number {
     if (this.difficulty === 'easy') return 1.5;
@@ -632,6 +851,9 @@ function createParticleMesh(skin: SkinDef): { mesh: Mesh; glow: Mesh } {
 function loadLevel(game: GameManager, scene: any) {
   // Clear previous level objects
   clearLevel(game, scene);
+  // Reset camera position
+  game.camTargetX = 0;
+  game.camTargetZ = 5;
 
   const lvl = game.mode === 'quickplay' || game.mode === 'timetrial' || game.mode === 'minimal' || game.mode === 'zen'
     ? game.generateRandomLevel()
@@ -879,6 +1101,10 @@ class GravityPhysicsSystem extends createSystem({}) {
     const game = this.game;
     if (!game) return;
 
+    // Update particle FX and starfield (always, every frame)
+    game.fx.update(delta);
+    game.starfield.update(delta);
+
     // Rotate stars
     for (const s of game.starObjs) {
       if (!s.collected) s.mesh.rotation.y += delta * 2;
@@ -995,6 +1221,16 @@ class GravityPhysicsSystem extends createSystem({}) {
       game.trailLine.geometry.setDrawRange(0, game.particleTrail.length);
     }
 
+    // Camera tracking — smoothly follow particle during simulation
+    if (game.cameraFollowEnabled) {
+      game.camTargetX = game.particleX * 0.4;
+      game.camTargetZ = game.particleZ * 0.4 + game.camOffsetZ;
+      const camPos = this.camera.position;
+      const lerpFactor = 1 - Math.exp(-game.camSmoothing * delta);
+      camPos.x += (game.camTargetX - camPos.x) * lerpFactor;
+      camPos.z += (game.camTargetZ - camPos.z) * lerpFactor;
+    }
+
     // Wall collisions
     for (const w of game.wallObjs) {
       const halfW = w.w / 2 + PARTICLE_R;
@@ -1031,6 +1267,7 @@ class GravityPhysicsSystem extends createSystem({}) {
         game.comboCount++;
         game.stats.starsTotal++;
         game.audio.comboStar(game.comboCount);
+        game.fx.burst(s.x, 0.3, s.z, '#ffdd00', 12 + game.comboCount * 4, 2.5, 0.5);
         // Warp star achievement — collected within 1s of warping
         if (game.lastWarpTime > 0 && (_time - game.lastWarpTime) < 1) {
           game.unlockedAchievements.add('warp_star');
@@ -1047,6 +1284,7 @@ class GravityPhysicsSystem extends createSystem({}) {
         // Death
         game.particleActive = false;
         game.audio.blackHoleDeath();
+        game.fx.burst(game.particleX, 0.15, game.particleZ, '#440066', 30, 4, 0.8);
         game.state = 'gameover';
         game.score = 0;
         return;
@@ -1082,6 +1320,7 @@ class GravityPhysicsSystem extends createSystem({}) {
         bp.cooldown = 0.2;
         game.bumperHits++;
         game.audio.bumperHit();
+        game.fx.burst(game.particleX, 0.15, game.particleZ, '#ff44ff', 10, 3, 0.4);
         // Flash bumper
         const origScale = bp.mesh.scale.x;
         bp.mesh.scale.set(origScale * 1.3, 1, origScale * 1.3);
@@ -1105,6 +1344,7 @@ class GravityPhysicsSystem extends createSystem({}) {
         }
         game.speedPadHits++;
         game.audio.speedBoost();
+        game.fx.burst(game.particleX, 0.1, game.particleZ, '#44ff44', 8, 2, 0.3);
         game.unlockedAchievements.add('speed_boost');
         if (game.speedPadHits >= 3) game.unlockedAchievements.add('speed_3');
         // Move particle past pad to prevent re-trigger
@@ -1126,6 +1366,8 @@ class GravityPhysicsSystem extends createSystem({}) {
         game.warpUses++;
         game.lastWarpTime = _time;
         game.audio.warpPortal();
+        game.fx.ring(wp.ax, 0.2, wp.az, '#ff8844', wp.radius, 12);
+        game.fx.burst(wp.bx, 0.2, wp.bz, '#ff8844', 8, 2, 0.4);
         game.unlockedAchievements.add('warp_used');
         continue;
       }
@@ -1139,6 +1381,8 @@ class GravityPhysicsSystem extends createSystem({}) {
         game.warpUses++;
         game.lastWarpTime = _time;
         game.audio.warpPortal();
+        game.fx.ring(wp.bx, 0.2, wp.bz, '#ff8844', wp.radius, 12);
+        game.fx.burst(wp.ax, 0.2, wp.az, '#ff8844', 8, 2, 0.4);
         game.unlockedAchievements.add('warp_used');
       }
     }
@@ -1161,6 +1405,7 @@ class GravityPhysicsSystem extends createSystem({}) {
         const rating = game.calcStarRating();
         if (game.mode === 'campaign' && game.currentLevel < 40) {
           game.levelBestStars[game.currentLevel] = Math.max(game.levelBestStars[game.currentLevel], rating);
+          game.highestUnlockedLevel = Math.max(game.highestUnlockedLevel, game.currentLevel + 1);
         }
 
         // Check specific achievements
@@ -1190,6 +1435,8 @@ class GravityPhysicsSystem extends createSystem({}) {
         game.checkAchievements();
 
         game.audio.levelWin();
+        game.fx.ring(game.endPortalMesh!.position.x, 0.2, game.endPortalMesh!.position.z, game.theme.accent, 1.5, 24);
+        game.fx.burst(game.endPortalMesh!.position.x, 0.3, game.endPortalMesh!.position.z, '#ffdd00', 20, 3, 0.7);
         game.state = 'gameover';
         return;
       }
@@ -1200,6 +1447,7 @@ class GravityPhysicsSystem extends createSystem({}) {
       game.particleActive = false;
       game.stats.gamesPlayed++;
       game.audio.levelFail();
+      game.fx.burst(game.particleX, 0.15, game.particleZ, '#ff4444', 15, 3, 0.5);
       game.state = 'gameover';
       game.score = 0;
     }
@@ -1446,7 +1694,7 @@ class GravityUISystem extends createSystem({
         const idx = i;
         this.wireBtn(entity, `ls-${idx}`, () => {
           const lvlIdx = game.lsPage * 10 + idx - 1;
-          if (lvlIdx < 40) {
+          if (lvlIdx < 40 && lvlIdx <= game.highestUnlockedLevel) {
             game.currentLevel = lvlIdx;
             game.audio.buttonClick();
             this.showPanel('difficulty');
@@ -1487,6 +1735,15 @@ class GravityUISystem extends createSystem({
         game.audio.launch();
       });
     });
+  }
+
+  private updateTitle() {
+    const entity = this.panelEntities.get('title');
+    if (!entity) return;
+    const lvl = this.game.getPlayerLevel();
+    const xpProg = this.game.getPlayerXPProgress();
+    this.setText(entity, 'lvl-badge', `LVL ${lvl}`);
+    this.setText(entity, 'xp-text', `${xpProg} / 100 XP`);
   }
 
   private updateLeaderboard(_triggerEntity: Entity) {
@@ -1550,8 +1807,13 @@ class GravityUISystem extends createSystem({
     for (let i = 1; i <= 10; i++) {
       const lvlIdx = this.game.lsPage * 10 + i - 1;
       const stars = this.game.levelBestStars[lvlIdx] || 0;
-      const starStr = stars > 0 ? ` (${'*'.repeat(stars)})` : '';
-      this.setText(entity, `ls-${i}`, lvlIdx < 40 ? `${lvlIdx + 1}${starStr}` : '');
+      const locked = lvlIdx > this.game.highestUnlockedLevel;
+      if (locked) {
+        this.setText(entity, `ls-${i}`, lvlIdx < 40 ? `[${lvlIdx + 1}]` : '');
+      } else {
+        const starStr = stars > 0 ? ` ${'*'.repeat(stars)}` : '';
+        this.setText(entity, `ls-${i}`, lvlIdx < 40 ? `${lvlIdx + 1}${starStr}` : '');
+      }
     }
   }
 
@@ -1592,6 +1854,10 @@ class GravityUISystem extends createSystem({
     this.setText(entity, 'go-rating', rating > 0
       ? '*'.repeat(rating) + (rating < 3 ? '-'.repeat(3 - rating) : '') + (extraStr ? ` ${extraStr}` : '')
       : (extraStr || '---'));
+    // XP earned
+    const xpEarned = won ? Math.floor(this.game.score / 10) : 0;
+    this.setText(entity, 'go-xp', won ? `+${xpEarned} XP` : '');
+    this.setText(entity, 'go-lvl', won ? `LVL ${this.game.getPlayerLevel()}` : '');
   }
 
   private updateCountdown() {
@@ -1631,7 +1897,7 @@ class GravityUISystem extends createSystem({
     // State-driven panel visibility
     const g = this.game;
     switch (g.state) {
-      case 'title': this.showPanel('title'); break;
+      case 'title': this.showPanel('title'); this.updateTitle(); break;
       case 'modes': this.showPanel('modes'); break;
       case 'difficulty': this.showPanel('difficulty'); break;
       case 'levelselect': this.showPanel('levelselect'); break;
@@ -1692,6 +1958,21 @@ class GravityInputSystem extends createSystem({}) {
       }
     });
 
+    // Mouse move for ghost well preview
+    canvas.addEventListener('mousemove', (e: MouseEvent) => {
+      if (this.game.state !== 'placing') { this.game.ghostWell.hide(); return; }
+      const rect = canvas.getBoundingClientRect();
+      this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      this.raycaster.setFromCamera(this.mouse, this.camera);
+      const hit = this.raycaster.ray.intersectPlane(this.groundPlane, this.intersection);
+      if (hit && Math.abs(this.intersection.x) <= HF_W && Math.abs(this.intersection.z) <= HF_H && this.game.wellsUsed < this.game.maxWells) {
+        this.game.ghostWell.update(this.intersection.x, this.intersection.z, this.game.wellType, this.game.wellStrength, this.game.theme);
+      } else {
+        this.game.ghostWell.hide();
+      }
+    });
+
     canvas.addEventListener('wheel', (e: WheelEvent) => {
       if (this.game.state !== 'placing') return;
       e.preventDefault();
@@ -1734,6 +2015,8 @@ class GravityInputSystem extends createSystem({}) {
     }
 
     game.audio.placeWell();
+    const fxCol = game.wellType === 'attractor' ? game.theme.attractor : game.theme.repulsor;
+    game.fx.burst(x, 0.2, z, fxCol, 10, 2, 0.4);
     updatePreview(game, this.scene);
   }
 
@@ -1741,6 +2024,9 @@ class GravityInputSystem extends createSystem({}) {
     if (!this.game) return;
     const game = this.game;
     const kb = this.input.keyboard;
+
+    // Hide ghost well when not placing
+    if (game.state !== 'placing') game.ghostWell.hide();
 
     // Keyboard controls
     if (game.state === 'placing' || game.state === 'simulating') {
@@ -1868,6 +2154,11 @@ async function main() {
 
   // Build field
   buildField(world.scene, game);
+
+  // Initialize visual effects
+  game.fx.init(world.scene);
+  game.starfield.init(world.scene);
+  game.ghostWell.addToScene(world.scene);
 
   // Create panel entities
   const panelConfigs = [
