@@ -60,12 +60,28 @@ interface WallObj {
 interface BlackHoleObj {
   mesh: Mesh; glow: Mesh; x: number; z: number; radius: number;
 }
+interface BumperObj {
+  mesh: Mesh; glow: Mesh; x: number; z: number; radius: number;
+  cooldown: number;
+}
+interface SpeedPadObj {
+  mesh: Mesh; glow: Mesh; x: number; z: number; w: number; d: number;
+  dx: number; dz: number; boost: number;
+}
+interface WarpPortalObj {
+  meshA: Mesh; glowA: Mesh; meshB: Mesh; glowB: Mesh;
+  ax: number; az: number; bx: number; bz: number;
+  radius: number; cooldown: number;
+}
 interface LevelDef {
   sx: number; sz: number; ex: number; ez: number;
   maxWells: number; threeStarWells: number;
   walls: { x: number; z: number; w: number; d: number }[];
   stars: { x: number; z: number }[];
   bh: { x: number; z: number; r: number }[];
+  bumpers?: { x: number; z: number; r: number }[];
+  pads?: { x: number; z: number; w: number; d: number; dx: number; dz: number; boost: number }[];
+  warps?: { ax: number; az: number; bx: number; bz: number; r: number }[];
 }
 interface Achievement { id: string; name: string; desc: string; }
 interface ThemeDef {
@@ -154,6 +170,16 @@ const ACHIEVEMENTS: Achievement[] = [
   { id: 'xp_100', name: 'Rising Star', desc: 'Earn 100 total XP' },
   { id: 'xp_500', name: 'Graviton', desc: 'Earn 500 total XP' },
   { id: 'xp_1000', name: 'Singularity', desc: 'Earn 1000 total XP' },
+  { id: 'bumper_bounce', name: 'Pinball', desc: 'Bounce off a bumper' },
+  { id: 'bumper_chain_3', name: 'Bumper Combo', desc: 'Hit 3 bumpers in one run' },
+  { id: 'speed_boost', name: 'Turbo', desc: 'Use a speed pad' },
+  { id: 'warp_used', name: 'Warped', desc: 'Use a warp portal' },
+  { id: 'warp_star', name: 'Warp Star', desc: 'Collect a star within 1s of warping' },
+  { id: 'campaign_30', name: 'New Frontier', desc: 'Reach campaign level 31' },
+  { id: 'campaign_40', name: 'Grand Master', desc: 'Clear all 40 campaign levels' },
+  { id: 'no_bumper', name: 'Smooth Sailing', desc: 'Clear a bumper level without hitting any' },
+  { id: 'speed_3', name: 'Triple Boost', desc: 'Hit 3 speed pads in one run' },
+  { id: 'all_stars_200', name: 'Galaxy', desc: 'Collect 200 total stars' },
 ];
 
 const LEVELS: LevelDef[] = [
@@ -217,6 +243,26 @@ const LEVELS: LevelDef[] = [
   { sx: -3.5, sz: -2.5, ex: 3.5, ez: 2.5, maxWells: 5, threeStarWells: 2, walls: [{ x: -2.5, z: -0.5, w: 0.3, d: 3 }, { x: -1, z: 1, w: 0.3, d: 2 }, { x: 0.5, z: -0.5, w: 0.3, d: 3 }, { x: 2, z: 1, w: 0.3, d: 2 }], stars: [{ x: -1.8, z: 1.5 }, { x: 0, z: 0 }, { x: 1.5, z: -1 }], bh: [{ x: -0.3, z: 2, r: 0.3 }, { x: 1, z: 1.5, r: 0.3 }] },
   // 30: Ultimate challenge
   { sx: -3.5, sz: -2.5, ex: 3.5, ez: 2.5, maxWells: 3, threeStarWells: 1, walls: [{ x: -2, z: 0, w: 0.3, d: 5 }, { x: 0, z: 0, w: 0.3, d: 5 }, { x: 2, z: 0, w: 0.3, d: 5 }, { x: 0, z: -2, w: 6, d: 0.3 }, { x: 0, z: 2, w: 6, d: 0.3 }], stars: [{ x: -1, z: 1 }, { x: 1, z: -1 }], bh: [{ x: -3, z: 1, r: 0.35 }, { x: -1, z: -1, r: 0.3 }, { x: 1, z: 1, r: 0.3 }, { x: 3, z: -1, r: 0.35 }] },
+  // 31: Bumper intro
+  { sx: -3.5, sz: 0, ex: 3.5, ez: 0, maxWells: 4, threeStarWells: 2, walls: [], stars: [{ x: 0, z: 1 }, { x: 0, z: -1 }], bh: [], bumpers: [{ x: -1, z: 0, r: 0.4 }, { x: 1, z: 0, r: 0.4 }] },
+  // 32: Speed pad intro
+  { sx: -3.5, sz: 0, ex: 3.5, ez: 0, maxWells: 3, threeStarWells: 1, walls: [{ x: 0, z: 1.5, w: 4, d: 0.3 }, { x: 0, z: -1.5, w: 4, d: 0.3 }], stars: [{ x: 1, z: 0 }], bh: [], pads: [{ x: -1.5, z: 0, w: 1, d: 0.6, dx: 1, dz: 0, boost: 5 }] },
+  // 33: Warp intro
+  { sx: -3, sz: -2, ex: 3, ez: 2, maxWells: 4, threeStarWells: 2, walls: [{ x: 0, z: 0, w: 0.3, d: 5 }], stars: [{ x: 1.5, z: -1 }], bh: [], warps: [{ ax: -1.5, az: 0, bx: 1.5, bz: 0, r: 0.35 }] },
+  // 34: Bumper corridor
+  { sx: -3.5, sz: -2, ex: 3.5, ez: 2, maxWells: 4, threeStarWells: 2, walls: [{ x: 0, z: 2, w: 5, d: 0.3 }, { x: 0, z: -2, w: 5, d: 0.3 }], stars: [{ x: -1, z: 0 }, { x: 1, z: 0 }], bh: [], bumpers: [{ x: -2, z: 0, r: 0.35 }, { x: 0, z: 0, r: 0.35 }, { x: 2, z: 0, r: 0.35 }] },
+  // 35: Boost + BH gauntlet
+  { sx: -3.5, sz: 0, ex: 3.5, ez: 0, maxWells: 3, threeStarWells: 1, walls: [], stars: [{ x: 0, z: 0 }, { x: 2, z: 0.5 }], bh: [{ x: -1, z: 1, r: 0.4 }, { x: 1, z: -1, r: 0.4 }], pads: [{ x: -2.5, z: 0, w: 0.8, d: 0.5, dx: 1, dz: 0, boost: 6 }, { x: 1.5, z: 0, w: 0.8, d: 0.5, dx: 1, dz: 0, boost: 4 }] },
+  // 36: Warp maze
+  { sx: -3, sz: -2.5, ex: 3, ez: 2.5, maxWells: 4, threeStarWells: 2, walls: [{ x: -1.5, z: 0, w: 0.3, d: 3 }, { x: 1.5, z: 0, w: 0.3, d: 3 }], stars: [{ x: 0, z: 0 }, { x: 2.5, z: 1 }], bh: [{ x: 0, z: 2, r: 0.3 }], warps: [{ ax: -2.5, az: 1, bx: 0, bz: -1.5, r: 0.3 }, { ax: 0, az: 1.5, bx: 2.5, bz: -1, r: 0.3 }] },
+  // 37: Mixed chaos
+  { sx: -3.5, sz: 0, ex: 3.5, ez: 0, maxWells: 5, threeStarWells: 2, walls: [{ x: 0, z: 0, w: 0.3, d: 2.5 }], stars: [{ x: -1.5, z: 0.5 }, { x: 1.5, z: -0.5 }, { x: 0, z: 1.5 }], bh: [{ x: 2, z: 1.5, r: 0.3 }], bumpers: [{ x: -2, z: -1, r: 0.3 }, { x: 1, z: 1, r: 0.35 }], pads: [{ x: -0.8, z: -1.5, w: 0.6, d: 0.5, dx: 0, dz: 1, boost: 5 }] },
+  // 38: Warp + bumper pinball
+  { sx: -3, sz: 0, ex: 3, ez: 0, maxWells: 3, threeStarWells: 1, walls: [{ x: 0, z: 2.5, w: 7, d: 0.3 }, { x: 0, z: -2.5, w: 7, d: 0.3 }], stars: [{ x: 0, z: 0 }, { x: -2, z: 1 }], bh: [], bumpers: [{ x: -1.5, z: -1, r: 0.3 }, { x: 0, z: 1, r: 0.35 }, { x: 1.5, z: -1, r: 0.3 }], warps: [{ ax: -2.5, az: -1.5, bx: 2.5, bz: 1.5, r: 0.3 }] },
+  // 39: Everything gauntlet
+  { sx: -3.5, sz: -2, ex: 3.5, ez: 2, maxWells: 4, threeStarWells: 2, walls: [{ x: -1, z: 0, w: 0.3, d: 2 }, { x: 1.5, z: 0, w: 0.3, d: 2 }], stars: [{ x: -2, z: -1 }, { x: 0, z: 1 }, { x: 2, z: -1 }], bh: [{ x: -2.5, z: 1.5, r: 0.35 }, { x: 2.5, z: -1.5, r: 0.35 }], bumpers: [{ x: 0, z: -1.5, r: 0.3 }], pads: [{ x: -1.5, z: 1.5, w: 0.7, d: 0.5, dx: 1, dz: -1, boost: 5 }], warps: [{ ax: -0.5, az: -2, bx: 0.5, bz: 2, r: 0.25 }] },
+  // 40: Grand finale v2
+  { sx: -3.5, sz: -2.5, ex: 3.5, ez: 2.5, maxWells: 3, threeStarWells: 1, walls: [{ x: -2, z: 0, w: 0.3, d: 4 }, { x: 2, z: 0, w: 0.3, d: 4 }, { x: 0, z: -1.5, w: 3, d: 0.3 }, { x: 0, z: 1.5, w: 3, d: 0.3 }], stars: [{ x: -1, z: 0 }, { x: 1, z: 0 }, { x: 0, z: -2.5 }], bh: [{ x: -3, z: 2, r: 0.3 }, { x: 0, z: 0, r: 0.35 }, { x: 3, z: -2, r: 0.3 }], bumpers: [{ x: -1, z: -2, r: 0.3 }, { x: 1, z: 2, r: 0.3 }], pads: [{ x: 2.5, z: 0, w: 0.6, d: 0.5, dx: 0, dz: 1, boost: 6 }], warps: [{ ax: -2.5, az: -2, bx: 2.5, bz: 2, r: 0.25 }] },
 ];
 
 const MODE_NAMES: Record<Mode, string> = {
@@ -275,6 +321,9 @@ class AudioEngine {
   comboStar(n: number) { this.playTone(880 + n * 200, 0.15, 'sine', 0.25); }
   achievementUnlock() { this.playTone(660, 0.15, 'sine', 0.2); setTimeout(() => this.playTone(880, 0.15, 'sine', 0.2), 100); setTimeout(() => this.playTone(1100, 0.2, 'sine', 0.25), 200); }
   resetLevel() { this.playTone(350, 0.08, 'triangle', 0.15); }
+  bumperHit() { this.playTone(700, 0.1, 'sine', 0.25); this.playTone(900, 0.08, 'sine', 0.2); }
+  speedBoost() { this.playTone(400, 0.15, 'sawtooth', 0.15); this.playTone(600, 0.12, 'sawtooth', 0.12); this.playTone(800, 0.1, 'sawtooth', 0.1); }
+  warpPortal() { this.playTone(200, 0.2, 'sine', 0.2); this.playTone(500, 0.15, 'sine', 0.25); this.playTone(800, 0.12, 'sine', 0.15); }
   ambient() { this.playTone(55, 2, 'sine', 0.05); this.playTone(82.5, 2, 'sine', 0.04); }
 }
 
@@ -339,7 +388,16 @@ class GameManager {
   attractorsPlaced = 0;
   repulsorsPlaced = 0;
   wallBounced = false;
-  levelBestStars: number[] = new Array(30).fill(0);
+  bumperHits = 0;
+  speedPadHits = 0;
+  warpUses = 0;
+  lastWarpTime = 0;
+  levelBestStars: number[] = new Array(40).fill(0);
+
+  // Scene objects for new mechanics
+  bumperObjs: BumperObj[] = [];
+  padObjs: SpeedPadObj[] = [];
+  warpObjs: WarpPortalObj[] = [];
 
   audio = new AudioEngine();
   scene: any = null;
@@ -398,6 +456,9 @@ class GameManager {
     s += Math.max(0, (this.maxWells - this.wellsUsed)) * 150;
     s += this.calcStarRating() * 300;
     if (this.comboCount >= 2) s += this.comboCount * 100;
+    s += this.bumperHits * 50;
+    s += this.speedPadHits * 75;
+    s += this.warpUses * 100;
     return s;
   }
 
@@ -514,6 +575,46 @@ function createBlackHoleMesh(radius: number): { mesh: Mesh; glow: Mesh } {
   return { mesh, glow };
 }
 
+function createBumperMesh(radius: number, theme: ThemeDef): { mesh: Mesh; glow: Mesh } {
+  const col = '#ff44ff';
+  const mesh = new Mesh(
+    new CylinderGeometry(radius, radius, 0.3, 16),
+    new MeshStandardMaterial({ color: new Color(col), emissive: new Color('#aa22aa'), emissiveIntensity: 0.6 })
+  );
+  const glow = new Mesh(
+    new CylinderGeometry(radius * 1.4, radius * 1.4, 0.1, 16),
+    new MeshBasicMaterial({ color: new Color(col), transparent: true, opacity: 0.2, blending: AdditiveBlending })
+  );
+  return { mesh, glow };
+}
+
+function createSpeedPadMesh(w: number, d: number, dx: number, dz: number): { mesh: Mesh; glow: Mesh } {
+  const col = '#44ff44';
+  const mesh = new Mesh(
+    new BoxGeometry(w, 0.04, d),
+    new MeshStandardMaterial({ color: new Color(col), emissive: new Color('#22aa22'), emissiveIntensity: 0.5, transparent: true, opacity: 0.7 })
+  );
+  // Arrow indicator mesh using a small cylinder
+  const glow = new Mesh(
+    new BoxGeometry(w * 0.6, 0.08, d * 0.4),
+    new MeshBasicMaterial({ color: new Color('#88ff88'), transparent: true, opacity: 0.3, blending: AdditiveBlending })
+  );
+  return { mesh, glow };
+}
+
+function createWarpMesh(radius: number): { mesh: Mesh; glow: Mesh } {
+  const col = '#ff8844';
+  const mesh = new Mesh(
+    new TorusGeometry(radius, 0.05, 8, 20),
+    new MeshStandardMaterial({ color: new Color(col), emissive: new Color(col), emissiveIntensity: 0.7 })
+  );
+  const glow = new Mesh(
+    new SphereGeometry(radius * 0.6, 12, 12),
+    new MeshBasicMaterial({ color: new Color('#ffaa66'), transparent: true, opacity: 0.15, blending: AdditiveBlending })
+  );
+  return { mesh, glow };
+}
+
 function createParticleMesh(skin: SkinDef): { mesh: Mesh; glow: Mesh } {
   const mesh = new Mesh(
     new SphereGeometry(PARTICLE_R, 16, 16),
@@ -543,6 +644,10 @@ function loadLevel(game: GameManager, scene: any) {
   game.score = 0;
   game.timer = 0;
   game.wallBounced = false;
+  game.bumperHits = 0;
+  game.speedPadHits = 0;
+  game.warpUses = 0;
+  game.lastWarpTime = 0;
   game.particleActive = false;
   game.particleTrail = [];
 
@@ -585,6 +690,55 @@ function loadLevel(game: GameManager, scene: any) {
     game.bhObjs.push({ mesh: bm.mesh, glow: bm.glow, x: b.x, z: b.z, radius: b.r });
   }
 
+  // Bumpers
+  if (lvl.bumpers) {
+    for (const bp of lvl.bumpers) {
+      const bm = createBumperMesh(bp.r, game.theme);
+      bm.mesh.position.set(bp.x, 0.15, bp.z);
+      bm.glow.position.set(bp.x, 0.03, bp.z);
+      scene.add(bm.mesh);
+      scene.add(bm.glow);
+      game.bumperObjs.push({ mesh: bm.mesh, glow: bm.glow, x: bp.x, z: bp.z, radius: bp.r, cooldown: 0 });
+    }
+  }
+
+  // Speed pads
+  if (lvl.pads) {
+    for (const pd of lvl.pads) {
+      const pm = createSpeedPadMesh(pd.w, pd.d, pd.dx, pd.dz);
+      pm.mesh.position.set(pd.x, 0.02, pd.z);
+      pm.glow.position.set(pd.x, 0.04, pd.z);
+      scene.add(pm.mesh);
+      scene.add(pm.glow);
+      game.padObjs.push({ mesh: pm.mesh, glow: pm.glow, x: pd.x, z: pd.z, w: pd.w, d: pd.d, dx: pd.dx, dz: pd.dz, boost: pd.boost });
+    }
+  }
+
+  // Warp portals
+  if (lvl.warps) {
+    for (const wp of lvl.warps) {
+      const wA = createWarpMesh(wp.r);
+      wA.mesh.position.set(wp.ax, 0.2, wp.az);
+      wA.mesh.rotation.x = Math.PI / 2;
+      wA.glow.position.set(wp.ax, 0.15, wp.az);
+      scene.add(wA.mesh);
+      scene.add(wA.glow);
+
+      const wB = createWarpMesh(wp.r);
+      wB.mesh.position.set(wp.bx, 0.2, wp.bz);
+      wB.mesh.rotation.x = Math.PI / 2;
+      wB.glow.position.set(wp.bx, 0.15, wp.bz);
+      scene.add(wB.mesh);
+      scene.add(wB.glow);
+
+      game.warpObjs.push({
+        meshA: wA.mesh, glowA: wA.glow, meshB: wB.mesh, glowB: wB.glow,
+        ax: wp.ax, az: wp.az, bx: wp.bx, bz: wp.bz,
+        radius: wp.r, cooldown: 0,
+      });
+    }
+  }
+
   // Create particle (hidden until launch)
   const pm = createParticleMesh(game.skin);
   pm.mesh.position.set(lvl.sx, 0.15, lvl.sz);
@@ -618,6 +772,12 @@ function clearLevel(game: GameManager, scene: any) {
   game.wallObjs = [];
   for (const b of game.bhObjs) { scene.remove(b.mesh); scene.remove(b.glow); }
   game.bhObjs = [];
+  for (const bp of game.bumperObjs) { scene.remove(bp.mesh); scene.remove(bp.glow); }
+  game.bumperObjs = [];
+  for (const pd of game.padObjs) { scene.remove(pd.mesh); scene.remove(pd.glow); }
+  game.padObjs = [];
+  for (const wp of game.warpObjs) { scene.remove(wp.meshA); scene.remove(wp.glowA); scene.remove(wp.meshB); scene.remove(wp.glowB); }
+  game.warpObjs = [];
   if (game.particleMesh) { scene.remove(game.particleMesh); game.particleMesh = null; }
   if (game.particleGlow) { scene.remove(game.particleGlow); game.particleGlow = null; }
   if (game.startPortalMesh) { scene.remove(game.startPortalMesh); game.startPortalMesh = null; }
@@ -652,7 +812,37 @@ function updatePreview(game: GameManager, scene: any) {
   for (const d of game.previewDots) scene.remove(d);
   game.previewDots = [];
 
-  if (game.state !== 'placing' || game.wells.length === 0) return;
+  if (game.state !== 'placing') return;
+
+  // Draw field lines around wells
+  if (game.wells.length > 0) {
+    const lineMat = new MeshBasicMaterial({ color: new Color(game.theme.accent), transparent: true, opacity: 0.12 });
+    const lineGeo = new SphereGeometry(0.02, 4, 4);
+    for (const well of game.wells) {
+      const numLines = 8;
+      for (let l = 0; l < numLines; l++) {
+        const angle = (l / numLines) * Math.PI * 2;
+        const startDist = WELL_R * 2;
+        const endDist = well.strength * 0.25 + 0.5;
+        const steps = 8;
+        for (let s = 0; s < steps; s++) {
+          const t = s / steps;
+          const dist = startDist + t * endDist;
+          const fx = well.x + Math.cos(angle + t * 0.3) * dist;
+          const fz = well.z + Math.sin(angle + t * 0.3) * dist;
+          if (Math.abs(fx) <= HF_W && Math.abs(fz) <= HF_H) {
+            const dot = new Mesh(lineGeo, lineMat);
+            dot.position.set(fx, 0.08, fz);
+            scene.add(dot);
+            game.previewDots.push(dot);
+          }
+        }
+      }
+    }
+  }
+
+  // Trajectory preview
+  if (game.wells.length === 0) return;
 
   const lvl = game.mode === 'campaign' || game.mode === 'gauntlet' ? game.currentLevelDef : LEVELS[0];
   let px = game.particleX, pz = game.particleZ;
@@ -708,6 +898,26 @@ class GravityPhysicsSystem extends createSystem({}) {
     for (const w of game.wells) {
       const s = 1 + Math.sin(_time * 4) * 0.15;
       w.ring.scale.set(s, 1, s);
+    }
+
+    // Pulse bumpers
+    for (const bp of game.bumperObjs) {
+      const s = 1 + Math.sin(_time * 5) * 0.08;
+      bp.glow.scale.set(s, 1, s);
+    }
+
+    // Animate speed pads
+    for (const pd of game.padObjs) {
+      pd.glow.position.y = 0.04 + Math.sin(_time * 6) * 0.015;
+    }
+
+    // Rotate warp portals
+    for (const wp of game.warpObjs) {
+      wp.meshA.rotation.z += delta * 2;
+      wp.meshB.rotation.z -= delta * 2;
+      const ws = 1 + Math.sin(_time * 3) * 0.12;
+      wp.glowA.scale.set(ws, ws, ws);
+      wp.glowB.scale.set(ws, ws, ws);
     }
 
     // Countdown
@@ -821,6 +1031,10 @@ class GravityPhysicsSystem extends createSystem({}) {
         game.comboCount++;
         game.stats.starsTotal++;
         game.audio.comboStar(game.comboCount);
+        // Warp star achievement — collected within 1s of warping
+        if (game.lastWarpTime > 0 && (_time - game.lastWarpTime) < 1) {
+          game.unlockedAchievements.add('warp_star');
+        }
       }
     }
 
@@ -845,6 +1059,90 @@ class GravityPhysicsSystem extends createSystem({}) {
       }
     }
 
+    // Bumper collision
+    for (const bp of game.bumperObjs) {
+      if (bp.cooldown > 0) { bp.cooldown -= delta; continue; }
+      const dx = game.particleX - bp.x;
+      const dz = game.particleZ - bp.z;
+      const dist = Math.sqrt(dx * dx + dz * dz);
+      if (dist < bp.radius + PARTICLE_R) {
+        // Bounce off bumper
+        const nx = dx / dist;
+        const nz = dz / dist;
+        const dot = game.particleVX * nx + game.particleVZ * nz;
+        game.particleVX -= 2 * dot * nx;
+        game.particleVZ -= 2 * dot * nz;
+        // Add a kick
+        const kickMag = 4;
+        game.particleVX += nx * kickMag;
+        game.particleVZ += nz * kickMag;
+        // Push out of bumper
+        game.particleX = bp.x + nx * (bp.radius + PARTICLE_R + 0.05);
+        game.particleZ = bp.z + nz * (bp.radius + PARTICLE_R + 0.05);
+        bp.cooldown = 0.2;
+        game.bumperHits++;
+        game.audio.bumperHit();
+        // Flash bumper
+        const origScale = bp.mesh.scale.x;
+        bp.mesh.scale.set(origScale * 1.3, 1, origScale * 1.3);
+        setTimeout(() => bp.mesh.scale.set(origScale, 1, origScale), 100);
+        // Achievements
+        game.unlockedAchievements.add('bumper_bounce');
+        if (game.bumperHits >= 3) game.unlockedAchievements.add('bumper_chain_3');
+      }
+    }
+
+    // Speed pad collision
+    for (const pd of game.padObjs) {
+      const halfW = pd.w / 2;
+      const halfD = pd.d / 2;
+      if (game.particleX > pd.x - halfW && game.particleX < pd.x + halfW &&
+          game.particleZ > pd.z - halfD && game.particleZ < pd.z + halfD) {
+        const mag = Math.sqrt(pd.dx * pd.dx + pd.dz * pd.dz);
+        if (mag > 0) {
+          game.particleVX += (pd.dx / mag) * pd.boost;
+          game.particleVZ += (pd.dz / mag) * pd.boost;
+        }
+        game.speedPadHits++;
+        game.audio.speedBoost();
+        game.unlockedAchievements.add('speed_boost');
+        if (game.speedPadHits >= 3) game.unlockedAchievements.add('speed_3');
+        // Move particle past pad to prevent re-trigger
+        game.particleX += (pd.dx / (mag || 1)) * 0.15;
+        game.particleZ += (pd.dz / (mag || 1)) * 0.15;
+      }
+    }
+
+    // Warp portal collision
+    for (const wp of game.warpObjs) {
+      if (wp.cooldown > 0) { wp.cooldown -= delta; continue; }
+      const dxA = game.particleX - wp.ax;
+      const dzA = game.particleZ - wp.az;
+      const distA = Math.sqrt(dxA * dxA + dzA * dzA);
+      if (distA < wp.radius) {
+        game.particleX = wp.bx;
+        game.particleZ = wp.bz;
+        wp.cooldown = 0.5;
+        game.warpUses++;
+        game.lastWarpTime = _time;
+        game.audio.warpPortal();
+        game.unlockedAchievements.add('warp_used');
+        continue;
+      }
+      const dxB = game.particleX - wp.bx;
+      const dzB = game.particleZ - wp.bz;
+      const distB = Math.sqrt(dxB * dxB + dzB * dzB);
+      if (distB < wp.radius) {
+        game.particleX = wp.ax;
+        game.particleZ = wp.az;
+        wp.cooldown = 0.5;
+        game.warpUses++;
+        game.lastWarpTime = _time;
+        game.audio.warpPortal();
+        game.unlockedAchievements.add('warp_used');
+      }
+    }
+
     // End portal check
     if (game.endPortalMesh) {
       const dx = game.particleX - game.endPortalMesh.position.x;
@@ -861,7 +1159,7 @@ class GravityPhysicsSystem extends createSystem({}) {
         game.totalXP += Math.floor(game.score / 10);
 
         const rating = game.calcStarRating();
-        if (game.mode === 'campaign' && game.currentLevel < 30) {
+        if (game.mode === 'campaign' && game.currentLevel < 40) {
           game.levelBestStars[game.currentLevel] = Math.max(game.levelBestStars[game.currentLevel], rating);
         }
 
@@ -880,10 +1178,15 @@ class GravityPhysicsSystem extends createSystem({}) {
         if (game.mode === 'campaign' && game.currentLevel >= 9) game.unlockedAchievements.add('campaign_5');
         if (game.mode === 'campaign' && game.currentLevel >= 19) game.unlockedAchievements.add('campaign_20');
         if (game.mode === 'campaign' && game.currentLevel >= 29) game.unlockedAchievements.add('campaign_all');
+        if (game.mode === 'campaign' && game.currentLevel >= 30) game.unlockedAchievements.add('campaign_30');
+        if (game.mode === 'campaign' && game.currentLevel >= 39) game.unlockedAchievements.add('campaign_40');
         if (game.mode === 'quickplay') game.unlockedAchievements.add('quickplay_1');
         if (game.mode === 'timetrial' && game.timer < 30) game.unlockedAchievements.add('timetrial_1');
         if (game.mode === 'minimal') game.unlockedAchievements.add('minimal_1');
         if (game.mode === 'daily') game.unlockedAchievements.add('daily_1');
+        if (game.stats.starsTotal >= 200) game.unlockedAchievements.add('all_stars_200');
+        // No bumper achievement
+        if (game.bumperObjs.length > 0 && game.bumperHits === 0) game.unlockedAchievements.add('no_bumper');
         game.checkAchievements();
 
         game.audio.levelWin();
@@ -1065,7 +1368,7 @@ class GravityUISystem extends createSystem({
       });
       this.wireBtn(entity, 'btn-next', () => {
         game.audio.buttonClick();
-        if (game.mode === 'campaign' && game.currentLevel < 29) {
+        if (game.mode === 'campaign' && game.currentLevel < 39) {
           game.currentLevel++;
           game.retryCount = 0;
           loadLevel(game, this.scene);
@@ -1074,7 +1377,7 @@ class GravityUISystem extends createSystem({
           updatePreview(game, this.scene);
         } else if (game.mode === 'gauntlet') {
           game.gauntletLevel++;
-          game.currentLevel = Math.min(game.gauntletLevel, 19);
+          game.currentLevel = Math.min(game.gauntletLevel, 39);
           loadLevel(game, this.scene);
           this.showPanels('hud', 'wellpicker');
           game.state = 'placing';
@@ -1143,7 +1446,7 @@ class GravityUISystem extends createSystem({
         const idx = i;
         this.wireBtn(entity, `ls-${idx}`, () => {
           const lvlIdx = game.lsPage * 10 + idx - 1;
-          if (lvlIdx < 30) {
+          if (lvlIdx < 40) {
             game.currentLevel = lvlIdx;
             game.audio.buttonClick();
             this.showPanel('difficulty');
@@ -1152,7 +1455,7 @@ class GravityUISystem extends createSystem({
         });
       }
       this.wireBtn(entity, 'btn-ls-prev', () => { if (game.lsPage > 0) game.lsPage--; this.updateLevelSelect(); game.audio.buttonClick(); });
-      this.wireBtn(entity, 'btn-ls-next', () => { if (game.lsPage < 2) game.lsPage++; this.updateLevelSelect(); game.audio.buttonClick(); });
+      this.wireBtn(entity, 'btn-ls-next', () => { if (game.lsPage < 3) game.lsPage++; this.updateLevelSelect(); game.audio.buttonClick(); });
       this.wireBtn(entity, 'btn-ls-back', () => { show('modes'); game.state = 'modes'; });
     });
 
@@ -1243,12 +1546,12 @@ class GravityUISystem extends createSystem({
   private updateLevelSelect() {
     const entity = this.panelEntities.get('levelselect');
     if (!entity) return;
-    this.setText(entity, 'ls-page', `Page ${this.game.lsPage + 1} / 3`);
+    this.setText(entity, 'ls-page', `Page ${this.game.lsPage + 1} / 4`);
     for (let i = 1; i <= 10; i++) {
       const lvlIdx = this.game.lsPage * 10 + i - 1;
       const stars = this.game.levelBestStars[lvlIdx] || 0;
       const starStr = stars > 0 ? ` (${'*'.repeat(stars)})` : '';
-      this.setText(entity, `ls-${i}`, lvlIdx < 30 ? `${lvlIdx + 1}${starStr}` : '');
+      this.setText(entity, `ls-${i}`, lvlIdx < 40 ? `${lvlIdx + 1}${starStr}` : '');
     }
   }
 
@@ -1280,8 +1583,15 @@ class GravityUISystem extends createSystem({
     this.setText(entity, 'go-score', `Score: ${this.game.score}`);
     this.setText(entity, 'go-stars', `Stars: ${this.game.starsCollected}/${this.game.starObjs.length}`);
     this.setText(entity, 'go-wells', `Wells Used: ${this.game.wellsUsed}`);
+    const extras: string[] = [];
+    if (this.game.bumperHits > 0) extras.push(`Bumpers: ${this.game.bumperHits}`);
+    if (this.game.speedPadHits > 0) extras.push(`Boosts: ${this.game.speedPadHits}`);
+    if (this.game.warpUses > 0) extras.push(`Warps: ${this.game.warpUses}`);
+    const extraStr = extras.length > 0 ? extras.join(' / ') : '';
     const rating = won ? this.game.calcStarRating() : 0;
-    this.setText(entity, 'go-rating', rating > 0 ? '*'.repeat(rating) + (rating < 3 ? '-'.repeat(3 - rating) : '') : '---');
+    this.setText(entity, 'go-rating', rating > 0
+      ? '*'.repeat(rating) + (rating < 3 ? '-'.repeat(3 - rating) : '') + (extraStr ? ` ${extraStr}` : '')
+      : (extraStr || '---'));
   }
 
   private updateCountdown() {

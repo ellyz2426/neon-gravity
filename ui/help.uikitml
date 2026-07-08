@@ -14,20 +14,19 @@
   <span class="text">Right Click: Toggle attractor/repulsor</span>
   <span class="text">Scroll Wheel: Adjust well strength</span>
   <span class="text">Space: Launch particle</span>
-  <span class="text">R: Reset level</span>
-  <span class="text">ESC: Pause</span>
-  <span class="text">WASD: Pan camera</span>
+  <span class="text">R: Reset level   Z: Undo well</span>
+  <span class="text">ESC: Pause   WASD: Pan camera</span>
   <span class="head">VR Controls</span>
   <span class="text">Trigger: Place well</span>
-  <span class="text">A Button: Launch particle</span>
-  <span class="text">B Button: Pause</span>
+  <span class="text">A Button: Launch   B Button: Pause</span>
   <span class="text">Thumbstick: Adjust strength</span>
   <span class="head">Objects</span>
   <span class="text">Cyan = Attractor (pulls particle)</span>
   <span class="text">Orange = Repulsor (pushes particle)</span>
   <span class="text">Yellow = Stars (collect for points)</span>
   <span class="text">Dark = Black holes (instant death)</span>
-  <span class="text">Green = Start portal</span>
-  <span class="text">Cyan Ring = End portal (reach to win)</span>
+  <span class="text">Pink Cylinder = Bumper (bounces particle)</span>
+  <span class="text">Green Pad = Speed boost (accelerates)</span>
+  <span class="text">Orange Ring = Warp portal (teleports)</span>
   <button id="btn-help-back" class="back" cursor="pointer">BACK</button>
 </div>
