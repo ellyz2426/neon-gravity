@@ -1,0 +1,19 @@
+<style>
+  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ff88; border-width: 0.12; border-radius: 2; gap: 1; width: 48; }
+  .title { font-size: 3.5; color: #00ff88; font-weight: bold; }
+  .stat { font-size: 1.8; color: #aaddcc; }
+  .stars { font-size: 3; color: #ffaa00; }
+  .btn { font-size: 2; color: #ffffff; background-color: rgba(0, 255, 136, 0.08); border-color: #006644; border-width: 0.06; border-radius: 1; padding: 1; cursor: pointer; width: 80%; text-align: center; }
+  .back { font-size: 1.8; color: #ff6666; background-color: rgba(255, 100, 100, 0.08); border-color: #660000; border-width: 0.06; border-radius: 1; padding: 0.8; cursor: pointer; width: 80%; text-align: center; }
+</style>
+<div class="panel">
+  <span id="result-title" class="title">LEVEL CLEAR!</span>
+  <span id="final-score" class="stat">Score: 0</span>
+  <span id="coins-result" class="stat">Coins: 0/0</span>
+  <span id="time-result" class="stat">Time: 0.0s</span>
+  <span id="flips-result" class="stat">Flips: 0</span>
+  <span id="star-rating" class="stars">*</span>
+  <button id="btn-next" class="btn" cursor="pointer">NEXT LEVEL</button>
+  <button id="btn-retry" class="btn" cursor="pointer">RETRY</button>
+  <button id="btn-menu" class="back" cursor="pointer">MENU</button>
+</div>

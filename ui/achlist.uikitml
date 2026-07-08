@@ -1,0 +1,28 @@
+<style>
+  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #ffaa00; border-width: 0.12; border-radius: 2; gap: 0.5; width: 56; }
+  .title { font-size: 3; color: #ffaa00; font-weight: bold; margin-bottom: 1; }
+  .row { font-size: 1.4; color: #aabb88; }
+  .nav { display: flex; flex-direction: row; gap: 3; margin-top: 1; }
+  .btn { font-size: 1.6; color: #ffffff; background-color: rgba(255, 170, 0, 0.08); border-color: #664400; border-width: 0.06; border-radius: 1; padding: 0.6; padding-left: 2; padding-right: 2; cursor: pointer; }
+  .page { font-size: 1.4; color: #888888; }
+  .back { font-size: 1.8; color: #ff6666; background-color: rgba(255, 100, 100, 0.08); border-color: #660000; border-width: 0.06; border-radius: 1; padding: 0.8; margin-top: 1; cursor: pointer; width: 80%; text-align: center; }
+</style>
+<div class="panel">
+  <span class="title">ACHIEVEMENTS</span>
+  <span id="ach0" class="row">---</span>
+  <span id="ach1" class="row">---</span>
+  <span id="ach2" class="row">---</span>
+  <span id="ach3" class="row">---</span>
+  <span id="ach4" class="row">---</span>
+  <span id="ach5" class="row">---</span>
+  <span id="ach6" class="row">---</span>
+  <span id="ach7" class="row">---</span>
+  <span id="ach8" class="row">---</span>
+  <span id="ach9" class="row">---</span>
+  <div class="nav">
+    <button id="btn-prev" class="btn" cursor="pointer">PREV</button>
+    <span id="page-info" class="page">1/4</span>
+    <button id="btn-next" class="btn" cursor="pointer">NEXT</button>
+  </div>
+  <button id="btn-back" class="back" cursor="pointer">BACK</button>
+</div>

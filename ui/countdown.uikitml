@@ -1,0 +1,7 @@
+<style>
+  .cd { display: flex; align-items: center; justify-content: center; padding: 2; }
+  .num { font-size: 8; color: #00ffff; font-weight: bold; }
+</style>
+<div class="cd">
+  <span id="countdown-text" class="num">3</span>
+</div>

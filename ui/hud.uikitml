@@ -1,0 +1,16 @@
+<style>
+  .hud { display: flex; flex-direction: row; align-items: center; padding: 1; padding-left: 2; padding-right: 2; background-color: rgba(0, 0, 0, 0.7); border-color: #004444; border-width: 0.06; border-radius: 1; gap: 2; }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 0.2; }
+  .label { font-size: 1; color: #668888; }
+  .value { font-size: 1.6; color: #00ffff; font-weight: bold; }
+  .mode { font-size: 1.4; color: #ffaa00; font-weight: bold; }
+</style>
+<div class="hud">
+  <div class="item"><span class="label">SCORE</span><span id="score-label" class="value">0</span></div>
+  <div class="item"><span class="label">COINS</span><span id="coins-label" class="value">0/0</span></div>
+  <div class="item"><span class="label">GRAVITY</span><span id="gravity-label" class="value">DOWN</span></div>
+  <div class="item"><span class="label">FLIPS</span><span id="flips-label" class="value">0</span></div>
+  <div class="item"><span class="label">TIME</span><span id="time-label" class="value">0.0s</span></div>
+  <span id="level-label" class="value">Lv 1</span>
+  <span id="mode-label" class="mode">CAMPAIGN</span>
+</div>

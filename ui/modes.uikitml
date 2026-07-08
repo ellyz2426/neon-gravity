@@ -1,0 +1,18 @@
+<style>
+  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ffff; border-width: 0.12; border-radius: 2; gap: 0.8; width: 52; }
+  .title { font-size: 3; color: #00ffff; font-weight: bold; }
+  .btn { font-size: 1.8; color: #ffffff; background-color: rgba(0, 255, 255, 0.08); border-color: #006666; border-width: 0.06; border-radius: 1; padding: 0.8; padding-left: 3; padding-right: 3; cursor: pointer; width: 80%; text-align: center; }
+  .back { font-size: 1.8; color: #ff6666; background-color: rgba(255, 100, 100, 0.08); border-color: #660000; border-width: 0.06; border-radius: 1; padding: 0.8; margin-top: 1; cursor: pointer; width: 80%; text-align: center; }
+</style>
+<div class="panel">
+  <span class="title">SELECT MODE</span>
+  <button id="btn-campaign" class="btn" cursor="pointer">CAMPAIGN</button>
+  <button id="btn-quickplay" class="btn" cursor="pointer">QUICK PLAY</button>
+  <button id="btn-timed" class="btn" cursor="pointer">TIME ATTACK</button>
+  <button id="btn-zen" class="btn" cursor="pointer">ZEN</button>
+  <button id="btn-speedrun" class="btn" cursor="pointer">SPEEDRUN</button>
+  <button id="btn-mirror" class="btn" cursor="pointer">MIRROR</button>
+  <button id="btn-randomizer" class="btn" cursor="pointer">RANDOMIZER</button>
+  <button id="btn-endless" class="btn" cursor="pointer">ENDLESS</button>
+  <button id="btn-back" class="back" cursor="pointer">BACK</button>
+</div>

@@ -1,0 +1,20 @@
+<style>
+  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ffff; border-width: 0.12; border-radius: 2; gap: 0.6; width: 52; }
+  .title { font-size: 3; color: #00ffff; font-weight: bold; margin-bottom: 1; }
+  .row { font-size: 1.6; color: #aadddd; }
+  .back { font-size: 1.8; color: #ff6666; background-color: rgba(255, 100, 100, 0.08); border-color: #660000; border-width: 0.06; border-radius: 1; padding: 0.8; margin-top: 1; cursor: pointer; width: 80%; text-align: center; }
+</style>
+<div class="panel">
+  <span class="title">LEADERBOARD</span>
+  <span id="row0" class="row">1. ---</span>
+  <span id="row1" class="row">2. ---</span>
+  <span id="row2" class="row">3. ---</span>
+  <span id="row3" class="row">4. ---</span>
+  <span id="row4" class="row">5. ---</span>
+  <span id="row5" class="row">6. ---</span>
+  <span id="row6" class="row">7. ---</span>
+  <span id="row7" class="row">8. ---</span>
+  <span id="row8" class="row">9. ---</span>
+  <span id="row9" class="row">10. ---</span>
+  <button id="btn-back" class="back" cursor="pointer">BACK</button>
+</div>

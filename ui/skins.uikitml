@@ -1,0 +1,18 @@
+<style>
+  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ffff; border-width: 0.12; border-radius: 2; gap: 0.6; width: 48; }
+  .title { font-size: 3; color: #00ffff; font-weight: bold; margin-bottom: 1; }
+  .skin { font-size: 1.6; color: #aadddd; cursor: pointer; padding: 0.4; }
+  .back { font-size: 1.8; color: #ff6666; background-color: rgba(255, 100, 100, 0.08); border-color: #660000; border-width: 0.06; border-radius: 1; padding: 0.8; margin-top: 1; cursor: pointer; width: 80%; text-align: center; }
+</style>
+<div class="panel">
+  <span class="title">BALL SKINS</span>
+  <button id="skin0" class="skin" cursor="pointer">Neon Cyan</button>
+  <button id="skin1" class="skin" cursor="pointer">Solar Flare</button>
+  <button id="skin2" class="skin" cursor="pointer">Plasma Pink</button>
+  <button id="skin3" class="skin" cursor="pointer">Frost Core</button>
+  <button id="skin4" class="skin" cursor="pointer">Toxic Green</button>
+  <button id="skin5" class="skin" cursor="pointer">Royal Gold</button>
+  <button id="skin6" class="skin" cursor="pointer">Void Purple</button>
+  <button id="skin7" class="skin" cursor="pointer">Inferno Red</button>
+  <button id="btn-back" class="back" cursor="pointer">BACK</button>
+</div>

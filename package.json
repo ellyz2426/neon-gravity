@@ -1,0 +1,19 @@
+{
+  "name": "neon-gravity",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx iwsdk dev up",
+    "build": "tsc --noEmit && vite build"
+  },
+  "dependencies": {
+    "@iwsdk/core": "^0.4.1"
+  },
+  "devDependencies": {
+    "@iwsdk/vite-plugin-dev": "^0.4.1",
+    "@iwsdk/vite-plugin-uikitml": "^0.4.1",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.0"
+  }
+}

@@ -1,0 +1,19 @@
+<style>
+  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ffff; border-width: 0.12; border-radius: 2; gap: 1.2; width: 52; }
+  .title { font-size: 5; color: #00ffff; font-weight: bold; }
+  .sub { font-size: 1.8; color: #668888; margin-bottom: 1; }
+  .btn { font-size: 2.2; color: #ffffff; background-color: rgba(0, 255, 255, 0.08); border-color: #006666; border-width: 0.06; border-radius: 1; padding: 1; padding-left: 4; padding-right: 4; cursor: pointer; width: 80%; text-align: center; }
+  .info { font-size: 1.4; color: #448888; }
+</style>
+<div class="panel">
+  <span class="title">NEON GRAVITY</span>
+  <span class="sub">Gravity-Switching Puzzle</span>
+  <span id="level-info" class="info">Level 1 - 0 XP</span>
+  <button id="btn-play" class="btn" cursor="pointer">PLAY</button>
+  <button id="btn-scores" class="btn" cursor="pointer">LEADERBOARD</button>
+  <button id="btn-achievements" class="btn" cursor="pointer">ACHIEVEMENTS</button>
+  <button id="btn-stats" class="btn" cursor="pointer">STATISTICS</button>
+  <button id="btn-skins" class="btn" cursor="pointer">SKINS</button>
+  <button id="btn-settings" class="btn" cursor="pointer">SETTINGS</button>
+  <button id="btn-help" class="btn" cursor="pointer">HOW TO PLAY</button>
+</div>
