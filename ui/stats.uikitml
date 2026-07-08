@@ -2,19 +2,15 @@
   .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ffff; border-width: 0.12; border-radius: 2; gap: 0.6; width: 48; }
   .title { font-size: 3; color: #00ffff; font-weight: bold; margin-bottom: 1; }
   .row { font-size: 1.6; color: #aadddd; }
-  .back { font-size: 1.8; color: #ff6666; background-color: rgba(255, 100, 100, 0.08); border-color: #660000; border-width: 0.06; border-radius: 1; padding: 0.8; margin-top: 1; cursor: pointer; width: 80%; text-align: center; }
+  .back { font-size: 1.6; color: #888888; background-color: rgba(255, 255, 255, 0.05); border-color: #333333; border-width: 0.06; border-radius: 1; padding: 0.8; margin-top: 1; cursor: pointer; width: 60%; text-align: center; }
 </style>
 <div class="panel">
   <span class="title">STATISTICS</span>
-  <span id="stat0" class="row">Games: 0</span>
-  <span id="stat1" class="row">Total Score: 0</span>
-  <span id="stat2" class="row">Best Score: 0</span>
-  <span id="stat3" class="row">Coins: 0</span>
-  <span id="stat4" class="row">Flips: 0</span>
-  <span id="stat5" class="row">Deaths: 0</span>
-  <span id="stat6" class="row">Levels: 0</span>
-  <span id="stat7" class="row">Best Time: --</span>
-  <span id="stat8" class="row">Bounces: 0</span>
-  <span id="stat9" class="row">Level: 1</span>
-  <button id="btn-back" class="back" cursor="pointer">BACK</button>
+  <span id="stat-games" class="row">Games Played: 0</span>
+  <span id="stat-wins" class="row">Levels Won: 0</span>
+  <span id="stat-stars-total" class="row">Stars Collected: 0</span>
+  <span id="stat-wells-placed" class="row">Wells Placed: 0</span>
+  <span id="stat-time-played" class="row">Time Played: 0m</span>
+  <span id="stat-best-score" class="row">Best Score: 0</span>
+  <button id="btn-stat-back" class="back" cursor="pointer">BACK</button>
 </div>

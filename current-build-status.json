@@ -8,7 +8,7 @@
   "build_start_utc": "2026-07-08T07:00:00Z",
   "target_hours": 6,
   "total_build_minutes": 75,
-  "status": "waiting_continuation",
+  "status": "building",
   "rounds": [
     {
       "round": 1,
@@ -80,5 +80,5 @@
     "browser_logs": "skipped (commandReady:false)",
     "ecs_systems": "skipped (commandReady:false)"
   },
-  "last_updated_utc": "2026-07-08T11:20:00Z"
+  "last_updated_utc": "2026-07-08T10:59:02Z"
 }

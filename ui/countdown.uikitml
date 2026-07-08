@@ -3,5 +3,5 @@
   .num { font-size: 8; color: #00ffff; font-weight: bold; }
 </style>
 <div class="cd">
-  <span id="countdown-text" class="num">3</span>
+  <span id="cd-text" class="num">3</span>
 </div>

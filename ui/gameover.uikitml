@@ -7,13 +7,12 @@
   .back { font-size: 1.8; color: #ff6666; background-color: rgba(255, 100, 100, 0.08); border-color: #660000; border-width: 0.06; border-radius: 1; padding: 0.8; cursor: pointer; width: 80%; text-align: center; }
 </style>
 <div class="panel">
-  <span id="result-title" class="title">LEVEL CLEAR!</span>
-  <span id="final-score" class="stat">Score: 0</span>
-  <span id="coins-result" class="stat">Coins: 0/0</span>
-  <span id="time-result" class="stat">Time: 0.0s</span>
-  <span id="flips-result" class="stat">Flips: 0</span>
-  <span id="star-rating" class="stars">*</span>
+  <span id="go-title" class="title">LEVEL COMPLETE</span>
+  <span id="go-score" class="stat">Score: 0</span>
+  <span id="go-stars" class="stat">Stars: 0/0</span>
+  <span id="go-wells" class="stat">Wells Used: 0</span>
+  <span id="go-rating" class="stars">---</span>
   <button id="btn-next" class="btn" cursor="pointer">NEXT LEVEL</button>
   <button id="btn-retry" class="btn" cursor="pointer">RETRY</button>
-  <button id="btn-menu" class="back" cursor="pointer">MENU</button>
+  <button id="btn-go-menu" class="back" cursor="pointer">MENU</button>
 </div>

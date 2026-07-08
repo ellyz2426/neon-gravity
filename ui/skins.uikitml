@@ -1,18 +1,21 @@
 <style>
-  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ffff; border-width: 0.12; border-radius: 2; gap: 0.6; width: 48; }
-  .title { font-size: 3; color: #00ffff; font-weight: bold; margin-bottom: 1; }
-  .skin { font-size: 1.6; color: #aadddd; cursor: pointer; padding: 0.4; }
-  .back { font-size: 1.8; color: #ff6666; background-color: rgba(255, 100, 100, 0.08); border-color: #660000; border-width: 0.06; border-radius: 1; padding: 0.8; margin-top: 1; cursor: pointer; width: 80%; text-align: center; }
+  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ffff; border-width: 0.12; border-radius: 2; gap: 1; width: 48; }
+  .title { font-size: 3; color: #00ffff; font-weight: bold; margin-bottom: 0.5; }
+  .name { font-size: 2.5; color: #ffaa00; font-weight: bold; }
+  .status { font-size: 1.6; color: #aadddd; }
+  .row { display: flex; flex-direction: row; gap: 2; margin-top: 0.5; }
+  .btn { font-size: 1.8; color: #ffffff; background-color: rgba(0, 255, 255, 0.08); border-color: #006666; border-width: 0.06; border-radius: 1; padding: 0.8; padding-left: 2; padding-right: 2; cursor: pointer; }
+  .select { font-size: 2; color: #00ff88; background-color: rgba(0, 255, 136, 0.1); border-color: #006644; border-width: 0.06; border-radius: 1; padding: 0.8; padding-left: 3; padding-right: 3; cursor: pointer; }
+  .back { font-size: 1.6; color: #888888; background-color: rgba(255, 255, 255, 0.05); border-color: #333333; border-width: 0.06; border-radius: 1; padding: 0.6; margin-top: 0.5; cursor: pointer; width: 60%; text-align: center; }
 </style>
 <div class="panel">
-  <span class="title">BALL SKINS</span>
-  <button id="skin0" class="skin" cursor="pointer">Neon Cyan</button>
-  <button id="skin1" class="skin" cursor="pointer">Solar Flare</button>
-  <button id="skin2" class="skin" cursor="pointer">Plasma Pink</button>
-  <button id="skin3" class="skin" cursor="pointer">Frost Core</button>
-  <button id="skin4" class="skin" cursor="pointer">Toxic Green</button>
-  <button id="skin5" class="skin" cursor="pointer">Royal Gold</button>
-  <button id="skin6" class="skin" cursor="pointer">Void Purple</button>
-  <button id="skin7" class="skin" cursor="pointer">Inferno Red</button>
-  <button id="btn-back" class="back" cursor="pointer">BACK</button>
+  <span class="title">PARTICLE SKINS</span>
+  <span id="skin-name" class="name">Neon Cyan</span>
+  <span id="skin-status" class="status">Unlocked</span>
+  <div class="row">
+    <button id="btn-skin-prev" class="btn" cursor="pointer">&lt; Prev</button>
+    <button id="btn-skin-select" class="select" cursor="pointer">SELECT</button>
+    <button id="btn-skin-next" class="btn" cursor="pointer">Next &gt;</button>
+  </div>
+  <button id="btn-skin-back" class="back" cursor="pointer">BACK</button>
 </div>

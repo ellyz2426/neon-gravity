@@ -1,25 +1,33 @@
 <style>
-  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ffff; border-width: 0.12; border-radius: 2; gap: 1; width: 52; }
+  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ffff; border-width: 0.12; border-radius: 2; gap: 0.8; width: 52; }
   .title { font-size: 3; color: #00ffff; font-weight: bold; }
-  .text { font-size: 1.6; color: #aadddd; }
+  .text { font-size: 1.5; color: #aadddd; }
   .head { font-size: 1.8; color: #00ffff; font-weight: bold; margin-top: 0.5; }
-  .back { font-size: 1.8; color: #ff6666; background-color: rgba(255, 100, 100, 0.08); border-color: #660000; border-width: 0.06; border-radius: 1; padding: 0.8; margin-top: 1; cursor: pointer; width: 80%; text-align: center; }
+  .back { font-size: 1.6; color: #888888; background-color: rgba(255, 255, 255, 0.05); border-color: #333333; border-width: 0.06; border-radius: 1; padding: 0.8; margin-top: 1; cursor: pointer; width: 60%; text-align: center; }
 </style>
 <div class="panel">
   <span class="title">HOW TO PLAY</span>
-  <span class="text">Flip gravity to guide the ball to the exit!</span>
+  <span class="text">Place gravity wells to guide the particle</span>
+  <span class="text">from start portal to end portal.</span>
   <span class="head">Browser Controls</span>
-  <span class="text">WASD/Arrows: Change gravity direction</span>
-  <span class="text">ESC/P: Pause</span>
+  <span class="text">Left Click: Place gravity well</span>
+  <span class="text">Right Click: Toggle attractor/repulsor</span>
+  <span class="text">Scroll Wheel: Adjust well strength</span>
+  <span class="text">Space: Launch particle</span>
+  <span class="text">R: Reset level</span>
+  <span class="text">ESC: Pause</span>
+  <span class="text">WASD: Pan camera</span>
   <span class="head">VR Controls</span>
-  <span class="text">Thumbstick: Change gravity</span>
-  <span class="text">B: Pause</span>
+  <span class="text">Trigger: Place well</span>
+  <span class="text">A Button: Launch particle</span>
+  <span class="text">B Button: Pause</span>
+  <span class="text">Thumbstick: Adjust strength</span>
   <span class="head">Objects</span>
-  <span class="text">Orange = Goal exit portal</span>
-  <span class="text">Yellow = Coins (collect for points)</span>
-  <span class="text">Red = Spikes (instant death)</span>
-  <span class="text">Green = Bounce pads</span>
-  <span class="text">Brown = Crumbling platforms</span>
-  <span class="text">Purple = Portals (teleport)</span>
-  <button id="btn-back" class="back" cursor="pointer">BACK</button>
+  <span class="text">Cyan = Attractor (pulls particle)</span>
+  <span class="text">Orange = Repulsor (pushes particle)</span>
+  <span class="text">Yellow = Stars (collect for points)</span>
+  <span class="text">Dark = Black holes (instant death)</span>
+  <span class="text">Green = Start portal</span>
+  <span class="text">Cyan Ring = End portal (reach to win)</span>
+  <button id="btn-help-back" class="back" cursor="pointer">BACK</button>
 </div>

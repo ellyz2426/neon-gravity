@@ -129,7 +129,8 @@ const ACHIEVEMENTS: Achievement[] = [
   { id: 'play_20', name: 'Dedicated', desc: 'Play 20 games' },
   { id: 'play_50', name: 'Veteran', desc: 'Play 50 games' },
   { id: 'campaign_5', name: 'Halfway There', desc: 'Clear campaign level 10' },
-  { id: 'campaign_all', name: 'Campaign Clear', desc: 'Clear all 20 campaign levels' },
+  { id: 'campaign_20', name: 'Original Twenty', desc: 'Clear campaign level 20' },
+  { id: 'campaign_all', name: 'Campaign Clear', desc: 'Clear all 30 campaign levels' },
   { id: 'quickplay_1', name: 'Quick Solve', desc: 'Complete a Quick Play level' },
   { id: 'timetrial_1', name: 'Speed Runner', desc: 'Complete Time Trial under 30s' },
   { id: 'minimal_1', name: 'Less Is More', desc: 'Complete a Minimal level' },
@@ -196,6 +197,26 @@ const LEVELS: LevelDef[] = [
   { sx: -3, sz: -2.5, ex: 3, ez: 2.5, maxWells: 3, threeStarWells: 1, walls: [{ x: -1, z: -1.5, w: 3, d: 0.3 }, { x: 1, z: 1.5, w: 3, d: 0.3 }, { x: 0, z: 0, w: 0.3, d: 2 }], stars: [{ x: -2, z: 0 }, { x: 2, z: 0 }], bh: [{ x: -1.5, z: 1, r: 0.4 }, { x: 1.5, z: -1, r: 0.4 }] },
   // 20: Grand finale
   { sx: -3.5, sz: -2.5, ex: 3.5, ez: 2.5, maxWells: 4, threeStarWells: 2, walls: [{ x: -2, z: 0, w: 0.3, d: 4 }, { x: 0, z: -1.5, w: 3, d: 0.3 }, { x: 0, z: 1.5, w: 3, d: 0.3 }, { x: 2, z: 0, w: 0.3, d: 4 }], stars: [{ x: -1, z: 0 }, { x: 0, z: 0 }, { x: 1, z: 0 }], bh: [{ x: -2.5, z: 2, r: 0.4 }, { x: 2.5, z: -2, r: 0.4 }, { x: 0, z: 0, r: 0.3 }] },
+  // 21: Open minefield
+  { sx: -3.5, sz: 0, ex: 3.5, ez: 0, maxWells: 3, threeStarWells: 1, walls: [], stars: [{ x: -1.5, z: 1 }, { x: 1.5, z: -1 }], bh: [{ x: -1, z: 0.5, r: 0.35 }, { x: 0, z: -0.5, r: 0.35 }, { x: 1, z: 0.5, r: 0.35 }, { x: 2, z: -0.5, r: 0.35 }] },
+  // 22: Channel run
+  { sx: -3.5, sz: -2.5, ex: 3.5, ez: -2.5, maxWells: 4, threeStarWells: 2, walls: [{ x: -2, z: -1, w: 0.3, d: 3 }, { x: 0, z: 1, w: 0.3, d: 3 }, { x: 2, z: -1, w: 0.3, d: 3 }], stars: [{ x: -1, z: 0 }, { x: 1, z: 0 }], bh: [{ x: -3, z: 1.5, r: 0.3 }, { x: 3, z: -1.5, r: 0.3 }] },
+  // 23: Crossroads
+  { sx: -3.5, sz: 0, ex: 3.5, ez: 0, maxWells: 3, threeStarWells: 1, walls: [{ x: 0, z: 0, w: 4, d: 0.3 }, { x: 0, z: 0, w: 0.3, d: 4 }], stars: [{ x: -1.5, z: -1.5 }, { x: 1.5, z: 1.5 }], bh: [{ x: 1.5, z: -1.5, r: 0.4 }] },
+  // 24: Spiral galaxy
+  { sx: -3, sz: -2, ex: 0, ez: 0, maxWells: 4, threeStarWells: 2, walls: [{ x: -1.5, z: -0.5, w: 3, d: 0.3 }, { x: 1.5, z: 0.5, w: 3, d: 0.3 }], stars: [{ x: -2, z: 1 }, { x: 0, z: -1 }, { x: 2, z: 1 }], bh: [{ x: 0, z: 0, r: 0.45 }] },
+  // 25: Asteroid belt
+  { sx: -3.5, sz: 0, ex: 3.5, ez: 0, maxWells: 5, threeStarWells: 2, walls: [{ x: -2, z: 0.8, w: 1, d: 0.3 }, { x: -1, z: -0.8, w: 1, d: 0.3 }, { x: 0, z: 0.8, w: 1, d: 0.3 }, { x: 1, z: -0.8, w: 1, d: 0.3 }, { x: 2, z: 0.8, w: 1, d: 0.3 }], stars: [{ x: -1.5, z: 0 }, { x: 0.5, z: 0 }, { x: 2.5, z: 0 }], bh: [] },
+  // 26: Double spiral
+  { sx: -3, sz: -2.5, ex: 3, ez: 2.5, maxWells: 3, threeStarWells: 1, walls: [{ x: -1, z: 1.5, w: 4, d: 0.3 }, { x: 1, z: -1.5, w: 4, d: 0.3 }], stars: [{ x: 0, z: 0 }], bh: [{ x: -2, z: -0.5, r: 0.4 }, { x: 2, z: 0.5, r: 0.4 }] },
+  // 27: Triple threat
+  { sx: -3.5, sz: 0, ex: 3.5, ez: 0, maxWells: 4, threeStarWells: 2, walls: [{ x: -1.5, z: 0, w: 0.3, d: 2.5 }, { x: 0, z: 0, w: 0.3, d: 2.5 }, { x: 1.5, z: 0, w: 0.3, d: 2.5 }], stars: [{ x: -0.75, z: 0.5 }, { x: 0.75, z: -0.5 }], bh: [{ x: -0.75, z: -1, r: 0.3 }, { x: 0.75, z: 1, r: 0.3 }, { x: 2.5, z: 0, r: 0.35 }] },
+  // 28: Enclosed BH
+  { sx: -3, sz: 0, ex: 3, ez: 0, maxWells: 3, threeStarWells: 1, walls: [{ x: 0, z: 0.8, w: 2.5, d: 0.3 }, { x: 0, z: -0.8, w: 2.5, d: 0.3 }, { x: -1.2, z: 0, w: 0.3, d: 1.3 }, { x: 1.2, z: 0, w: 0.3, d: 1.3 }], stars: [{ x: 0, z: 0 }], bh: [{ x: -2, z: 1.5, r: 0.4 }, { x: 2, z: -1.5, r: 0.4 }] },
+  // 29: Labyrinth
+  { sx: -3.5, sz: -2.5, ex: 3.5, ez: 2.5, maxWells: 5, threeStarWells: 2, walls: [{ x: -2.5, z: -0.5, w: 0.3, d: 3 }, { x: -1, z: 1, w: 0.3, d: 2 }, { x: 0.5, z: -0.5, w: 0.3, d: 3 }, { x: 2, z: 1, w: 0.3, d: 2 }], stars: [{ x: -1.8, z: 1.5 }, { x: 0, z: 0 }, { x: 1.5, z: -1 }], bh: [{ x: -0.3, z: 2, r: 0.3 }, { x: 1, z: 1.5, r: 0.3 }] },
+  // 30: Ultimate challenge
+  { sx: -3.5, sz: -2.5, ex: 3.5, ez: 2.5, maxWells: 3, threeStarWells: 1, walls: [{ x: -2, z: 0, w: 0.3, d: 5 }, { x: 0, z: 0, w: 0.3, d: 5 }, { x: 2, z: 0, w: 0.3, d: 5 }, { x: 0, z: -2, w: 6, d: 0.3 }, { x: 0, z: 2, w: 6, d: 0.3 }], stars: [{ x: -1, z: 1 }, { x: 1, z: -1 }], bh: [{ x: -3, z: 1, r: 0.35 }, { x: -1, z: -1, r: 0.3 }, { x: 1, z: 1, r: 0.3 }, { x: 3, z: -1, r: 0.35 }] },
 ];
 
 const MODE_NAMES: Record<Mode, string> = {
@@ -318,7 +339,7 @@ class GameManager {
   attractorsPlaced = 0;
   repulsorsPlaced = 0;
   wallBounced = false;
-  levelBestStars: number[] = new Array(20).fill(0);
+  levelBestStars: number[] = new Array(30).fill(0);
 
   audio = new AudioEngine();
   scene: any = null;
@@ -719,12 +740,27 @@ class GravityPhysicsSystem extends createSystem({}) {
     // Timer
     game.timer += delta;
 
+    // Zen mode timer for achievements
+    if (game.mode === 'zen') {
+      game.zenTimer += delta;
+      if (game.zenTimer >= 300) game.unlockedAchievements.add('zen_5');
+    }
+
     // Physics simulation
     const result = simulateStep(game.particleX, game.particleZ, game.particleVX, game.particleVZ, game.wells, delta);
     game.particleX = result.px;
     game.particleZ = result.pz;
     game.particleVX = result.vx;
     game.particleVZ = result.vz;
+
+    // Speed cap — prevent runaway velocity
+    const speed = Math.sqrt(game.particleVX * game.particleVX + game.particleVZ * game.particleVZ);
+    const MAX_SPEED = 20;
+    if (speed > MAX_SPEED) {
+      const scale = MAX_SPEED / speed;
+      game.particleVX *= scale;
+      game.particleVZ *= scale;
+    }
 
     // Update mesh position
     if (game.particleMesh) {
@@ -825,7 +861,7 @@ class GravityPhysicsSystem extends createSystem({}) {
         game.totalXP += Math.floor(game.score / 10);
 
         const rating = game.calcStarRating();
-        if (game.mode === 'campaign' && game.currentLevel < 20) {
+        if (game.mode === 'campaign' && game.currentLevel < 30) {
           game.levelBestStars[game.currentLevel] = Math.max(game.levelBestStars[game.currentLevel], rating);
         }
 
@@ -842,6 +878,8 @@ class GravityPhysicsSystem extends createSystem({}) {
         const hasRepulsor = game.wells.some(w => w.type === 'repulsor');
         if (hasAttractor && hasRepulsor) game.unlockedAchievements.add('mixed_wells');
         if (game.mode === 'campaign' && game.currentLevel >= 9) game.unlockedAchievements.add('campaign_5');
+        if (game.mode === 'campaign' && game.currentLevel >= 19) game.unlockedAchievements.add('campaign_20');
+        if (game.mode === 'campaign' && game.currentLevel >= 29) game.unlockedAchievements.add('campaign_all');
         if (game.mode === 'quickplay') game.unlockedAchievements.add('quickplay_1');
         if (game.mode === 'timetrial' && game.timer < 30) game.unlockedAchievements.add('timetrial_1');
         if (game.mode === 'minimal') game.unlockedAchievements.add('minimal_1');
@@ -1027,7 +1065,7 @@ class GravityUISystem extends createSystem({
       });
       this.wireBtn(entity, 'btn-next', () => {
         game.audio.buttonClick();
-        if (game.mode === 'campaign' && game.currentLevel < 19) {
+        if (game.mode === 'campaign' && game.currentLevel < 29) {
           game.currentLevel++;
           game.retryCount = 0;
           loadLevel(game, this.scene);
@@ -1105,7 +1143,7 @@ class GravityUISystem extends createSystem({
         const idx = i;
         this.wireBtn(entity, `ls-${idx}`, () => {
           const lvlIdx = game.lsPage * 10 + idx - 1;
-          if (lvlIdx < 20) {
+          if (lvlIdx < 30) {
             game.currentLevel = lvlIdx;
             game.audio.buttonClick();
             this.showPanel('difficulty');
@@ -1114,7 +1152,7 @@ class GravityUISystem extends createSystem({
         });
       }
       this.wireBtn(entity, 'btn-ls-prev', () => { if (game.lsPage > 0) game.lsPage--; this.updateLevelSelect(); game.audio.buttonClick(); });
-      this.wireBtn(entity, 'btn-ls-next', () => { if (game.lsPage < 1) game.lsPage++; this.updateLevelSelect(); game.audio.buttonClick(); });
+      this.wireBtn(entity, 'btn-ls-next', () => { if (game.lsPage < 2) game.lsPage++; this.updateLevelSelect(); game.audio.buttonClick(); });
       this.wireBtn(entity, 'btn-ls-back', () => { show('modes'); game.state = 'modes'; });
     });
 
@@ -1124,6 +1162,18 @@ class GravityUISystem extends createSystem({
       this.wireBtn(entity, 'btn-wp-repulse', () => { game.wellType = 'repulsor'; this.updateWellPicker(); game.audio.buttonClick(); });
       this.wireBtn(entity, 'btn-wp-str-up', () => { game.wellStrength = Math.min(10, game.wellStrength + 1); this.updateWellPicker(); game.audio.buttonClick(); });
       this.wireBtn(entity, 'btn-wp-str-down', () => { game.wellStrength = Math.max(1, game.wellStrength - 1); this.updateWellPicker(); game.audio.buttonClick(); });
+      this.wireBtn(entity, 'btn-wp-undo', () => {
+        game.audio.buttonClick();
+        if (game.wells.length > 0) {
+          const w = game.wells.pop()!;
+          this.scene.remove(w.mesh);
+          this.scene.remove(w.glow);
+          this.scene.remove(w.ring);
+          game.wellsUsed--;
+          game.audio.removeWell();
+          updatePreview(game, this.scene);
+        }
+      });
       this.wireBtn(entity, 'btn-wp-close', () => {
         game.audio.buttonClick();
         // Start countdown to launch
@@ -1193,12 +1243,12 @@ class GravityUISystem extends createSystem({
   private updateLevelSelect() {
     const entity = this.panelEntities.get('levelselect');
     if (!entity) return;
-    this.setText(entity, 'ls-page', `Page ${this.game.lsPage + 1} / 2`);
+    this.setText(entity, 'ls-page', `Page ${this.game.lsPage + 1} / 3`);
     for (let i = 1; i <= 10; i++) {
       const lvlIdx = this.game.lsPage * 10 + i - 1;
       const stars = this.game.levelBestStars[lvlIdx] || 0;
       const starStr = stars > 0 ? ` (${'*'.repeat(stars)})` : '';
-      this.setText(entity, `ls-${i}`, lvlIdx < 20 ? `${lvlIdx + 1}${starStr}` : '');
+      this.setText(entity, `ls-${i}`, lvlIdx < 30 ? `${lvlIdx + 1}${starStr}` : '');
     }
   }
 
@@ -1227,11 +1277,11 @@ class GravityUISystem extends createSystem({
     if (!entity) return;
     const won = this.game.score > 0;
     this.setText(entity, 'go-title', won ? 'LEVEL COMPLETE' : 'LEVEL FAILED');
-    this.setText(entity, 'go-score', String(this.game.score));
-    this.setText(entity, 'go-stars', `${this.game.starsCollected}/${this.game.starObjs.length}`);
-    this.setText(entity, 'go-wells', String(this.game.wellsUsed));
+    this.setText(entity, 'go-score', `Score: ${this.game.score}`);
+    this.setText(entity, 'go-stars', `Stars: ${this.game.starsCollected}/${this.game.starObjs.length}`);
+    this.setText(entity, 'go-wells', `Wells Used: ${this.game.wellsUsed}`);
     const rating = won ? this.game.calcStarRating() : 0;
-    this.setText(entity, 'go-rating', '*'.repeat(rating) + (rating < 3 ? '-'.repeat(3 - rating) : ''));
+    this.setText(entity, 'go-rating', rating > 0 ? '*'.repeat(rating) + (rating < 3 ? '-'.repeat(3 - rating) : '') : '---');
   }
 
   private updateCountdown() {
@@ -1368,6 +1418,11 @@ class GravityInputSystem extends createSystem({}) {
     if (game.wellType === 'attractor') game.attractorsPlaced++;
     else game.repulsorsPlaced++;
 
+    // Sandbox achievement
+    if (game.mode === 'sandbox' && game.wellsUsed >= 10) {
+      game.unlockedAchievements.add('sandbox_1');
+    }
+
     game.audio.placeWell();
     updatePreview(game, this.scene);
   }
@@ -1401,6 +1456,19 @@ class GravityInputSystem extends createSystem({}) {
       loadLevel(game, this.scene);
       game.state = 'placing';
       updatePreview(game, this.scene);
+    }
+
+    // Z to undo last well
+    if (game.state === 'placing' && kb.getKeyDown('KeyZ')) {
+      if (game.wells.length > 0) {
+        const w = game.wells.pop()!;
+        this.scene.remove(w.mesh);
+        this.scene.remove(w.glow);
+        this.scene.remove(w.ring);
+        game.wellsUsed--;
+        game.audio.removeWell();
+        updatePreview(game, this.scene);
+      }
     }
 
     // ESC to pause

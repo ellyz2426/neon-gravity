@@ -1,17 +1,15 @@
 <style>
   .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ffff; border-width: 0.12; border-radius: 2; gap: 1; width: 48; }
   .title { font-size: 3; color: #00ffff; font-weight: bold; margin-bottom: 1; }
-  .row { display: flex; flex-direction: row; align-items: center; gap: 2; }
-  .label { font-size: 1.8; color: #aadddd; width: 12; }
-  .val { font-size: 2; color: #00ffff; font-weight: bold; width: 6; text-align: center; }
+  .row { display: flex; flex-direction: row; align-items: center; gap: 1.5; width: 90%; }
+  .label { font-size: 1.8; color: #aadddd; width: 10; }
+  .val { font-size: 2; color: #00ffff; font-weight: bold; width: 8; text-align: center; }
   .btn { font-size: 1.8; color: #ffffff; background-color: rgba(0, 255, 255, 0.08); border-color: #006666; border-width: 0.06; border-radius: 1; padding: 0.6; padding-left: 1.5; padding-right: 1.5; cursor: pointer; }
-  .back { font-size: 1.8; color: #ff6666; background-color: rgba(255, 100, 100, 0.08); border-color: #660000; border-width: 0.06; border-radius: 1; padding: 0.8; margin-top: 1; cursor: pointer; width: 80%; text-align: center; }
+  .back { font-size: 1.6; color: #888888; background-color: rgba(255, 255, 255, 0.05); border-color: #333333; border-width: 0.06; border-radius: 1; padding: 0.8; margin-top: 1; cursor: pointer; width: 60%; text-align: center; }
 </style>
 <div class="panel">
   <span class="title">SETTINGS</span>
-  <div class="row"><span class="label">Master</span><button id="btn-master-down" class="btn" cursor="pointer">-</button><span id="master-vol" class="val">100</span><button id="btn-master-up" class="btn" cursor="pointer">+</button></div>
-  <div class="row"><span class="label">SFX</span><button id="btn-sfx-down" class="btn" cursor="pointer">-</button><span id="sfx-vol" class="val">100</span><button id="btn-sfx-up" class="btn" cursor="pointer">+</button></div>
-  <div class="row"><span class="label">Music</span><button id="btn-music-down" class="btn" cursor="pointer">-</button><span id="music-vol" class="val">100</span><button id="btn-music-up" class="btn" cursor="pointer">+</button></div>
-  <div class="row"><button id="btn-theme-prev" class="btn" cursor="pointer">&lt;</button><span id="theme-name" class="val">Neon Holodeck</span><button id="btn-theme-next" class="btn" cursor="pointer">&gt;</button></div>
-  <button id="btn-back" class="back" cursor="pointer">BACK</button>
+  <div class="row"><span class="label">Volume</span><button id="btn-vol-down" class="btn" cursor="pointer">-</button><span id="vol-label" class="val">80%</span><button id="btn-vol-up" class="btn" cursor="pointer">+</button></div>
+  <div class="row"><button id="btn-theme-prev" class="btn" cursor="pointer">&lt;</button><span class="label">Theme</span><span id="theme-label" class="val">Neon Holodeck</span><button id="btn-theme-next" class="btn" cursor="pointer">&gt;</button></div>
+  <button id="btn-set-back" class="back" cursor="pointer">BACK</button>
 </div>
