@@ -1,0 +1,87 @@
+{
+  "element": {
+    "type": "container",
+    "sourceTag": "div",
+    "children": [
+      {
+        "sourceTag": "span",
+        "type": "custom",
+        "children": [
+          "Achievement!"
+        ],
+        "properties": {
+          "id": "toast-text",
+          "class": "text"
+        },
+        "dataUid": "uid-2"
+      }
+    ],
+    "properties": {
+      "class": "toast"
+    },
+    "dataUid": "uid-1"
+  },
+  "classes": {
+    "toast": {
+      "content": {
+        "display": "flex",
+        "padding": "1",
+        "paddingLeft": "3",
+        "paddingRight": "3",
+        "backgroundColor": "rgba(0, 0, 0, 0.8)",
+        "borderColor": "#ffaa00",
+        "borderWidth": "0.08",
+        "borderRadius": 1
+      }
+    },
+    "text": {
+      "content": {
+        "fontSize": "2",
+        "color": "#ffaa00",
+        "fontWeight": "bold"
+      }
+    }
+  },
+  "ranges": {
+    "toast": {
+      "start": {
+        "line": 1,
+        "column": 2
+      },
+      "end": {
+        "line": 1,
+        "column": 8
+      }
+    },
+    "text": {
+      "start": {
+        "line": 2,
+        "column": 2
+      },
+      "end": {
+        "line": 2,
+        "column": 7
+      }
+    },
+    "uid-1": {
+      "start": {
+        "line": 4,
+        "column": 0
+      },
+      "end": {
+        "line": 6,
+        "column": 6
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 5,
+        "column": 2
+      },
+      "end": {
+        "line": 5,
+        "column": 56
+      }
+    }
+  }
+}

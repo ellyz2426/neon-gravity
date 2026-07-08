@@ -1,0 +1,285 @@
+{
+  "element": {
+    "type": "container",
+    "sourceTag": "div",
+    "children": [
+      {
+        "sourceTag": "span",
+        "type": "custom",
+        "children": [
+          "STATISTICS"
+        ],
+        "properties": {
+          "class": "title"
+        },
+        "dataUid": "uid-2"
+      },
+      {
+        "sourceTag": "span",
+        "type": "custom",
+        "children": [
+          "Games Played: 0"
+        ],
+        "properties": {
+          "id": "stat-games",
+          "class": "row"
+        },
+        "dataUid": "uid-3"
+      },
+      {
+        "sourceTag": "span",
+        "type": "custom",
+        "children": [
+          "Levels Won: 0"
+        ],
+        "properties": {
+          "id": "stat-wins",
+          "class": "row"
+        },
+        "dataUid": "uid-4"
+      },
+      {
+        "sourceTag": "span",
+        "type": "custom",
+        "children": [
+          "Stars Collected: 0"
+        ],
+        "properties": {
+          "id": "stat-stars-total",
+          "class": "row"
+        },
+        "dataUid": "uid-5"
+      },
+      {
+        "sourceTag": "span",
+        "type": "custom",
+        "children": [
+          "Wells Placed: 0"
+        ],
+        "properties": {
+          "id": "stat-wells-placed",
+          "class": "row"
+        },
+        "dataUid": "uid-6"
+      },
+      {
+        "sourceTag": "span",
+        "type": "custom",
+        "children": [
+          "Time Played: 0m"
+        ],
+        "properties": {
+          "id": "stat-time-played",
+          "class": "row"
+        },
+        "dataUid": "uid-7"
+      },
+      {
+        "sourceTag": "span",
+        "type": "custom",
+        "children": [
+          "Best Score: 0"
+        ],
+        "properties": {
+          "id": "stat-best-score",
+          "class": "row"
+        },
+        "dataUid": "uid-8"
+      },
+      {
+        "sourceTag": "button",
+        "type": "custom",
+        "children": [
+          "BACK"
+        ],
+        "properties": {
+          "id": "btn-stat-back",
+          "class": "back",
+          "cursor": "pointer"
+        },
+        "dataUid": "uid-9"
+      }
+    ],
+    "properties": {
+      "class": "panel"
+    },
+    "dataUid": "uid-1"
+  },
+  "classes": {
+    "panel": {
+      "content": {
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "center",
+        "padding": "3",
+        "backgroundColor": "rgba(5, 5, 20, 0.95)",
+        "borderColor": "#00ffff",
+        "borderWidth": "0.12",
+        "borderRadius": 2,
+        "gap": "0.6",
+        "width": "48"
+      }
+    },
+    "title": {
+      "content": {
+        "fontSize": "3",
+        "color": "#00ffff",
+        "fontWeight": "bold",
+        "marginBottom": "1"
+      }
+    },
+    "row": {
+      "content": {
+        "fontSize": "1.6",
+        "color": "#aadddd"
+      }
+    },
+    "back": {
+      "content": {
+        "fontSize": "1.6",
+        "color": "#888888",
+        "backgroundColor": "rgba(255, 255, 255, 0.05)",
+        "borderColor": "#333333",
+        "borderWidth": "0.06",
+        "borderRadius": 1,
+        "padding": "0.8",
+        "marginTop": "1",
+        "cursor": "pointer",
+        "width": "60%",
+        "textAlign": "center"
+      }
+    }
+  },
+  "ranges": {
+    "panel": {
+      "start": {
+        "line": 1,
+        "column": 2
+      },
+      "end": {
+        "line": 1,
+        "column": 8
+      }
+    },
+    "title": {
+      "start": {
+        "line": 2,
+        "column": 2
+      },
+      "end": {
+        "line": 2,
+        "column": 8
+      }
+    },
+    "row": {
+      "start": {
+        "line": 3,
+        "column": 2
+      },
+      "end": {
+        "line": 3,
+        "column": 6
+      }
+    },
+    "back": {
+      "start": {
+        "line": 4,
+        "column": 2
+      },
+      "end": {
+        "line": 4,
+        "column": 7
+      }
+    },
+    "uid-1": {
+      "start": {
+        "line": 6,
+        "column": 0
+      },
+      "end": {
+        "line": 15,
+        "column": 6
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 7,
+        "column": 2
+      },
+      "end": {
+        "line": 7,
+        "column": 39
+      }
+    },
+    "uid-3": {
+      "start": {
+        "line": 8,
+        "column": 2
+      },
+      "end": {
+        "line": 8,
+        "column": 58
+      }
+    },
+    "uid-4": {
+      "start": {
+        "line": 9,
+        "column": 2
+      },
+      "end": {
+        "line": 9,
+        "column": 55
+      }
+    },
+    "uid-5": {
+      "start": {
+        "line": 10,
+        "column": 2
+      },
+      "end": {
+        "line": 10,
+        "column": 67
+      }
+    },
+    "uid-6": {
+      "start": {
+        "line": 11,
+        "column": 2
+      },
+      "end": {
+        "line": 11,
+        "column": 65
+      }
+    },
+    "uid-7": {
+      "start": {
+        "line": 12,
+        "column": 2
+      },
+      "end": {
+        "line": 12,
+        "column": 64
+      }
+    },
+    "uid-8": {
+      "start": {
+        "line": 13,
+        "column": 2
+      },
+      "end": {
+        "line": 13,
+        "column": 61
+      }
+    },
+    "uid-9": {
+      "start": {
+        "line": 14,
+        "column": 2
+      },
+      "end": {
+        "line": 14,
+        "column": 72
+      }
+    }
+  }
+}
