@@ -1,11 +1,14 @@
 <style>
-  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ff88; border-width: 0.12; border-radius: 2; gap: 0.8; width: 48; }
+  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #00ff88; border-width: 0.12; border-radius: 2; gap: 0.7; width: 50; }
   .title { font-size: 3.5; color: #00ff88; font-weight: bold; }
   .stat { font-size: 1.8; color: #aaddcc; }
   .stars { font-size: 3; color: #ffaa00; }
   .xp-row { display: flex; flex-direction: row; align-items: center; gap: 1.5; }
   .xp-earned { font-size: 1.6; color: #ffaa00; font-weight: bold; }
   .xp-level { font-size: 1.4; color: #668888; }
+  .speed-row { display: flex; flex-direction: row; align-items: center; gap: 1.5; }
+  .speed-stat { font-size: 1.4; color: #66aacc; }
+  .time-stat { font-size: 1.4; color: #88aaaa; }
   .btn { font-size: 2; color: #ffffff; background-color: rgba(0, 255, 136, 0.08); border-color: #006644; border-width: 0.06; border-radius: 1; padding: 1; cursor: pointer; width: 80%; text-align: center; }
   .back { font-size: 1.8; color: #ff6666; background-color: rgba(255, 100, 100, 0.08); border-color: #660000; border-width: 0.06; border-radius: 1; padding: 0.8; cursor: pointer; width: 80%; text-align: center; }
 </style>
@@ -15,6 +18,10 @@
   <span id="go-stars" class="stat">Stars: 0/0</span>
   <span id="go-wells" class="stat">Wells Used: 0</span>
   <span id="go-rating" class="stars">---</span>
+  <div class="speed-row">
+    <span id="go-max-speed" class="speed-stat">Max Speed: 0</span>
+    <span id="go-time" class="time-stat">Time: 0:00</span>
+  </div>
   <div class="xp-row">
     <span id="go-xp" class="xp-earned">+0 XP</span>
     <span id="go-lvl" class="xp-level">LVL 1</span>

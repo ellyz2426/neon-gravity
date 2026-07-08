@@ -529,6 +529,136 @@ class GhostWell {
   }
 }
 
+// ─── Save/Load System ───────────────────────────────────────────────
+interface SaveData {
+  version: number;
+  themeIdx: number;
+  skinIdx: number;
+  unlockedAchievements: string[];
+  unlockedSkins: number[];
+  leaderboard: number[];
+  stats: Stats;
+  totalXP: number;
+  levelBestStars: number[];
+  highestUnlockedLevel: number;
+  volume: number;
+}
+
+function saveGame(game: GameManager) {
+  try {
+    const data: SaveData = {
+      version: 1,
+      themeIdx: game.themeIdx,
+      skinIdx: game.skinIdx,
+      unlockedAchievements: Array.from(game.unlockedAchievements),
+      unlockedSkins: Array.from(game.unlockedSkins),
+      leaderboard: game.leaderboard,
+      stats: { ...game.stats },
+      totalXP: game.totalXP,
+      levelBestStars: [...game.levelBestStars],
+      highestUnlockedLevel: game.highestUnlockedLevel,
+      volume: game.audio.volume,
+    };
+    localStorage.setItem('neon-gravity-save', JSON.stringify(data));
+  } catch (_e) { /* storage unavailable */ }
+}
+
+function loadGame(game: GameManager) {
+  try {
+    const raw = localStorage.getItem('neon-gravity-save');
+    if (!raw) return;
+    const data: SaveData = JSON.parse(raw);
+    if (data.version !== 1) return;
+    game.themeIdx = data.themeIdx ?? 0;
+    game.skinIdx = data.skinIdx ?? 0;
+    game.unlockedAchievements = new Set(data.unlockedAchievements ?? []);
+    game.unlockedSkins = new Set(data.unlockedSkins ?? [0]);
+    game.leaderboard = data.leaderboard ?? [];
+    if (data.stats) {
+      game.stats = { ...game.stats, ...data.stats };
+    }
+    game.totalXP = data.totalXP ?? 0;
+    if (data.levelBestStars) {
+      for (let i = 0; i < Math.min(data.levelBestStars.length, 40); i++) {
+        game.levelBestStars[i] = data.levelBestStars[i];
+      }
+    }
+    game.highestUnlockedLevel = data.highestUnlockedLevel ?? 0;
+    if (data.volume !== undefined) {
+      game.audio.volume = data.volume;
+      game.audio.setVolume(data.volume);
+    }
+  } catch (_e) { /* corrupted or unavailable */ }
+}
+
+// ─── 3D Floating Text ───────────────────────────────────────────────
+interface FloatingText {
+  mesh: Mesh;
+  life: number;
+  vy: number;
+}
+
+class FloatingTextManager {
+  private texts: FloatingText[] = [];
+  private scene: any;
+
+  init(scene: any) { this.scene = scene; }
+
+  spawn(x: number, y: number, z: number, color: string, scale = 0.5) {
+    // Use a glowing sphere cluster as a visual "!" indicator
+    const group = new Mesh(
+      new IcosahedronGeometry(0.08, 1),
+      new MeshBasicMaterial({ color: new Color(color), transparent: true, opacity: 1, blending: AdditiveBlending })
+    );
+    group.position.set(x, y, z);
+    group.scale.setScalar(scale);
+    this.scene.add(group);
+    this.texts.push({ mesh: group, life: 1.2, vy: 1.5 });
+  }
+
+  update(delta: number) {
+    for (let i = this.texts.length - 1; i >= 0; i--) {
+      const t = this.texts[i];
+      t.life -= delta;
+      t.mesh.position.y += t.vy * delta;
+      t.vy -= 0.5 * delta;
+      (t.mesh.material as MeshBasicMaterial).opacity = Math.max(0, t.life / 1.2);
+      t.mesh.scale.setScalar(0.5 + (1 - t.life / 1.2) * 0.3);
+      if (t.life <= 0) {
+        this.scene.remove(t.mesh);
+        this.texts.splice(i, 1);
+      }
+    }
+  }
+}
+
+// ─── Screen Shake ───────────────────────────────────────────────────
+class ScreenShake {
+  private intensity = 0;
+  private decay = 5;
+  private offsetX = 0;
+  private offsetY = 0;
+  private offsetZ = 0;
+
+  trigger(intensity: number) {
+    this.intensity = Math.max(this.intensity, intensity);
+  }
+
+  update(delta: number, camera: any) {
+    if (this.intensity < 0.001) {
+      this.intensity = 0;
+      return;
+    }
+    this.offsetX = (Math.random() - 0.5) * this.intensity * 2;
+    this.offsetY = (Math.random() - 0.5) * this.intensity * 1;
+    this.offsetZ = (Math.random() - 0.5) * this.intensity * 2;
+    camera.position.x += this.offsetX;
+    camera.position.y += this.offsetY;
+    camera.position.z += this.offsetZ;
+    this.intensity *= Math.max(0, 1 - this.decay * delta);
+  }
+}
+
 // ─── GameManager ────────────────────────────────────────────────────
 class GameManager {
   state: GameState = 'title';
@@ -606,6 +736,8 @@ class GameManager {
   fx = new ParticleFX();
   starfield = new Starfield();
   ghostWell = new GhostWell();
+  floatingText = new FloatingTextManager();
+  screenShake = new ScreenShake();
 
   // Camera tracking
   camTargetX = 0;
@@ -617,6 +749,14 @@ class GameManager {
 
   // Level unlock
   highestUnlockedLevel = 0;
+
+  // Auto-save timer
+  saveTimer = 0;
+  saveInterval = 10; // seconds
+
+  // Speed tracking for visual effects
+  lastSpeed = 0;
+  maxSpeedReached = 0;
 
   get theme(): ThemeDef { return THEMES[this.themeIdx]; }
   get skin(): SkinDef { return SKINS[this.skinIdx]; }
@@ -872,6 +1012,8 @@ function loadLevel(game: GameManager, scene: any) {
   game.lastWarpTime = 0;
   game.particleActive = false;
   game.particleTrail = [];
+  game.lastSpeed = 0;
+  game.maxSpeedReached = 0;
 
   // Start portal
   const sp = createPortal(game.theme.portal, lvl.sx, lvl.sz, scene);
@@ -1104,6 +1246,15 @@ class GravityPhysicsSystem extends createSystem({}) {
     // Update particle FX and starfield (always, every frame)
     game.fx.update(delta);
     game.starfield.update(delta);
+    game.floatingText.update(delta);
+    game.screenShake.update(delta, this.camera);
+
+    // Auto-save periodically
+    game.saveTimer += delta;
+    if (game.saveTimer >= game.saveInterval) {
+      game.saveTimer = 0;
+      saveGame(game);
+    }
 
     // Rotate stars
     for (const s of game.starObjs) {
@@ -1202,9 +1353,23 @@ class GravityPhysicsSystem extends createSystem({}) {
     if (game.particleMesh) {
       game.particleMesh.position.set(game.particleX, 0.15, game.particleZ);
       game.particleGlow!.position.set(game.particleX, 0.15, game.particleZ);
+
+      // Speed-based visual effects
+      const curSpeed = Math.sqrt(game.particleVX * game.particleVX + game.particleVZ * game.particleVZ);
+      game.lastSpeed = curSpeed;
+      game.maxSpeedReached = Math.max(game.maxSpeedReached, curSpeed);
+
+      // Dynamic particle glow based on speed
+      const speedNorm = Math.min(curSpeed / MAX_SPEED, 1);
+      const glowScale = PARTICLE_R * (2.5 + speedNorm * 3);
+      game.particleGlow!.scale.setScalar(glowScale / (PARTICLE_R * 2.5));
+      (game.particleGlow!.material as MeshBasicMaterial).opacity = 0.15 + speedNorm * 0.25;
+
+      // Speed-based emissive intensity on particle
+      (game.particleMesh.material as MeshStandardMaterial).emissiveIntensity = 0.8 + speedNorm * 1.2;
     }
 
-    // Update trail
+    // Update trail with speed-based coloring
     game.particleTrail.push(new Vector3(game.particleX, 0.12, game.particleZ));
     if (game.particleTrail.length > TRAIL_LEN) game.particleTrail.shift();
     if (game.trailLine) {
@@ -1219,6 +1384,19 @@ class GravityPhysicsSystem extends createSystem({}) {
       }
       positions.needsUpdate = true;
       game.trailLine.geometry.setDrawRange(0, game.particleTrail.length);
+
+      // Dynamic trail color based on current speed
+      const speedNorm2 = Math.min(game.lastSpeed / MAX_SPEED, 1);
+      const trailColor = new Color();
+      if (speedNorm2 < 0.33) {
+        trailColor.setHSL(0.55, 1, 0.5); // cyan
+      } else if (speedNorm2 < 0.66) {
+        trailColor.setHSL(0.15, 1, 0.5); // yellow-orange
+      } else {
+        trailColor.setHSL(0.0, 1, 0.5);  // red
+      }
+      (game.trailLine.material as LineBasicMaterial).color.copy(trailColor);
+      (game.trailLine.material as LineBasicMaterial).opacity = 0.3 + speedNorm2 * 0.4;
     }
 
     // Camera tracking — smoothly follow particle during simulation
@@ -1252,6 +1430,7 @@ class GravityPhysicsSystem extends createSystem({}) {
         }
         if (!game.wallBounced) { game.wallBounced = true; }
         game.audio.wallBounce();
+        game.screenShake.trigger(0.08);
       }
     }
 
@@ -1268,6 +1447,10 @@ class GravityPhysicsSystem extends createSystem({}) {
         game.stats.starsTotal++;
         game.audio.comboStar(game.comboCount);
         game.fx.burst(s.x, 0.3, s.z, '#ffdd00', 12 + game.comboCount * 4, 2.5, 0.5);
+        // Floating combo indicator
+        if (game.comboCount >= 2) {
+          game.floatingText.spawn(s.x, 0.6, s.z, '#ffdd00', 0.4 + game.comboCount * 0.15);
+        }
         // Warp star achievement — collected within 1s of warping
         if (game.lastWarpTime > 0 && (_time - game.lastWarpTime) < 1) {
           game.unlockedAchievements.add('warp_star');
@@ -1285,8 +1468,10 @@ class GravityPhysicsSystem extends createSystem({}) {
         game.particleActive = false;
         game.audio.blackHoleDeath();
         game.fx.burst(game.particleX, 0.15, game.particleZ, '#440066', 30, 4, 0.8);
+        game.screenShake.trigger(0.4);
         game.state = 'gameover';
         game.score = 0;
+        saveGame(game);
         return;
       }
       // Close call achievement check
@@ -1321,6 +1506,7 @@ class GravityPhysicsSystem extends createSystem({}) {
         game.bumperHits++;
         game.audio.bumperHit();
         game.fx.burst(game.particleX, 0.15, game.particleZ, '#ff44ff', 10, 3, 0.4);
+        game.screenShake.trigger(0.15);
         // Flash bumper
         const origScale = bp.mesh.scale.x;
         bp.mesh.scale.set(origScale * 1.3, 1, origScale * 1.3);
@@ -1437,6 +1623,8 @@ class GravityPhysicsSystem extends createSystem({}) {
         game.audio.levelWin();
         game.fx.ring(game.endPortalMesh!.position.x, 0.2, game.endPortalMesh!.position.z, game.theme.accent, 1.5, 24);
         game.fx.burst(game.endPortalMesh!.position.x, 0.3, game.endPortalMesh!.position.z, '#ffdd00', 20, 3, 0.7);
+        game.screenShake.trigger(0.2);
+        saveGame(game);
         game.state = 'gameover';
         return;
       }
@@ -1448,8 +1636,10 @@ class GravityPhysicsSystem extends createSystem({}) {
       game.stats.gamesPlayed++;
       game.audio.levelFail();
       game.fx.burst(game.particleX, 0.15, game.particleZ, '#ff4444', 15, 3, 0.5);
+      game.screenShake.trigger(0.25);
       game.state = 'gameover';
       game.score = 0;
+      saveGame(game);
     }
 
     // Time trial: check time limit
@@ -1459,6 +1649,7 @@ class GravityPhysicsSystem extends createSystem({}) {
       game.audio.levelFail();
       game.state = 'gameover';
       game.score = 0;
+      saveGame(game);
     }
   }
 }
@@ -1658,10 +1849,10 @@ class GravityUISystem extends createSystem({
 
     // Settings panel
     this.queries.settings.subscribe('qualify', (entity) => {
-      this.wireBtn(entity, 'btn-vol-up', () => { game.audio.volume = Math.min(1, game.audio.volume + 0.1); game.audio.setVolume(game.audio.volume); this.updateSettings(); game.audio.buttonClick(); });
-      this.wireBtn(entity, 'btn-vol-down', () => { game.audio.volume = Math.max(0, game.audio.volume - 0.1); game.audio.setVolume(game.audio.volume); this.updateSettings(); game.audio.buttonClick(); });
-      this.wireBtn(entity, 'btn-theme-next', () => { game.themeIdx = (game.themeIdx + 1) % THEMES.length; this.updateSettings(); this.applyTheme(); game.unlockedAchievements.add('theme_change'); game.audio.buttonClick(); });
-      this.wireBtn(entity, 'btn-theme-prev', () => { game.themeIdx = (game.themeIdx - 1 + THEMES.length) % THEMES.length; this.updateSettings(); this.applyTheme(); game.audio.buttonClick(); });
+      this.wireBtn(entity, 'btn-vol-up', () => { game.audio.volume = Math.min(1, game.audio.volume + 0.1); game.audio.setVolume(game.audio.volume); this.updateSettings(); game.audio.buttonClick(); saveGame(game); });
+      this.wireBtn(entity, 'btn-vol-down', () => { game.audio.volume = Math.max(0, game.audio.volume - 0.1); game.audio.setVolume(game.audio.volume); this.updateSettings(); game.audio.buttonClick(); saveGame(game); });
+      this.wireBtn(entity, 'btn-theme-next', () => { game.themeIdx = (game.themeIdx + 1) % THEMES.length; this.updateSettings(); this.applyTheme(); game.unlockedAchievements.add('theme_change'); game.audio.buttonClick(); saveGame(game); });
+      this.wireBtn(entity, 'btn-theme-prev', () => { game.themeIdx = (game.themeIdx - 1 + THEMES.length) % THEMES.length; this.updateSettings(); this.applyTheme(); game.audio.buttonClick(); saveGame(game); });
       this.wireBtn(entity, 'btn-set-back', () => { show('title'); game.state = 'title'; });
     });
 
@@ -1744,6 +1935,10 @@ class GravityUISystem extends createSystem({
     const xpProg = this.game.getPlayerXPProgress();
     this.setText(entity, 'lvl-badge', `LVL ${lvl}`);
     this.setText(entity, 'xp-text', `${xpProg} / 100 XP`);
+    // Campaign progress
+    const cleared = this.game.highestUnlockedLevel;
+    const totalStars = this.game.levelBestStars.reduce((a, b) => a + b, 0);
+    this.setText(entity, 'title-progress', `Campaign: ${cleared}/40 | Stars: ${totalStars}/120`);
   }
 
   private updateLeaderboard(_triggerEntity: Entity) {
@@ -1832,6 +2027,9 @@ class GravityUISystem extends createSystem({
     this.setText(entity, 'hud-stars', `${this.game.starsCollected}/${this.game.starObjs.length}`);
     this.setText(entity, 'hud-level', this.game.mode === 'campaign' ? String(this.game.currentLevel + 1) : '-');
     this.setText(entity, 'hud-mode', MODE_NAMES[this.game.mode] || '');
+    const speedDisplay = Math.round(this.game.lastSpeed * 10);
+    this.setText(entity, 'hud-speed', String(speedDisplay));
+    this.setText(entity, 'hud-combo', this.game.comboCount > 0 ? `x${this.game.comboCount}` : '-');
     const mins = Math.floor(this.game.timer / 60);
     const secs = Math.floor(this.game.timer % 60);
     this.setText(entity, 'hud-timer', `${mins}:${secs < 10 ? '0' : ''}${secs}`);
@@ -1854,6 +2052,12 @@ class GravityUISystem extends createSystem({
     this.setText(entity, 'go-rating', rating > 0
       ? '*'.repeat(rating) + (rating < 3 ? '-'.repeat(3 - rating) : '') + (extraStr ? ` ${extraStr}` : '')
       : (extraStr || '---'));
+    // Max speed and time
+    const maxSpd = Math.round(this.game.maxSpeedReached * 10);
+    this.setText(entity, 'go-max-speed', `Max Speed: ${maxSpd}`);
+    const mins = Math.floor(this.game.timer / 60);
+    const secs = Math.floor(this.game.timer % 60);
+    this.setText(entity, 'go-time', `Time: ${mins}:${secs < 10 ? '0' : ''}${secs}`);
     // XP earned
     const xpEarned = won ? Math.floor(this.game.score / 10) : 0;
     this.setText(entity, 'go-xp', won ? `+${xpEarned} XP` : '');
@@ -2159,6 +2363,10 @@ async function main() {
   game.fx.init(world.scene);
   game.starfield.init(world.scene);
   game.ghostWell.addToScene(world.scene);
+  game.floatingText.init(world.scene);
+
+  // Load saved progress
+  loadGame(game);
 
   // Create panel entities
   const panelConfigs = [

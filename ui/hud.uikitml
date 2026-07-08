@@ -1,9 +1,11 @@
 <style>
-  .hud { display: flex; flex-direction: row; align-items: center; padding: 0.8; padding-left: 2; padding-right: 2; background-color: rgba(0, 0, 0, 0.75); border-color: #004444; border-width: 0.06; border-radius: 1; gap: 2; }
+  .hud { display: flex; flex-direction: row; align-items: center; padding: 0.8; padding-left: 2; padding-right: 2; background-color: rgba(0, 0, 0, 0.75); border-color: #004444; border-width: 0.06; border-radius: 1; gap: 1.6; }
   .item { display: flex; flex-direction: column; align-items: center; gap: 0.2; }
   .label { font-size: 1; color: #448888; }
   .val { font-size: 1.8; color: #00ffff; font-weight: bold; }
   .mode-tag { font-size: 1.2; color: #00ff88; font-weight: bold; }
+  .speed-val { font-size: 1.8; font-weight: bold; color: #00ffff; }
+  .combo-val { font-size: 1.8; font-weight: bold; color: #ffdd00; }
 </style>
 <div class="hud">
   <div class="item"><span class="label">MODE</span><span id="hud-mode" class="mode-tag">CAMPAIGN</span></div>
@@ -11,5 +13,7 @@
   <div class="item"><span class="label">SCORE</span><span id="hud-score" class="val">0</span></div>
   <div class="item"><span class="label">WELLS</span><span id="hud-wells" class="val">5</span></div>
   <div class="item"><span class="label">STARS</span><span id="hud-stars" class="val">0/0</span></div>
+  <div class="item"><span class="label">SPEED</span><span id="hud-speed" class="speed-val">0</span></div>
+  <div class="item"><span class="label">COMBO</span><span id="hud-combo" class="combo-val">0</span></div>
   <div class="item"><span class="label">TIME</span><span id="hud-timer" class="val">0:00</span></div>
 </div>
