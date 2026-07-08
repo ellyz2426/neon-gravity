@@ -1,12 +1,12 @@
 {
   "schemaVersion": 2,
-  "sessionId": "7fe88d22-bb11-41ce-b4a4-54945d5a993c",
+  "sessionId": "fee0da06-3b33-4aea-82eb-b867427c99e1",
   "workspaceRoot": "/home/hatch/workspace/neon-gravity",
-  "pid": 18292,
-  "port": 8082,
-  "localUrl": "http://localhost:8082/",
+  "pid": 19266,
+  "port": 8081,
+  "localUrl": "http://localhost:8081/",
   "networkUrls": [
-    "http://198.19.0.2:8082/"
+    "http://198.19.0.2:8081/"
   ],
   "aiMode": "agent",
   "browser": {
@@ -14,9 +14,9 @@
     "connected": true,
     "commandReady": false,
     "connectedClientCount": 1,
-    "lastTransitionAt": "2026-07-08T10:19:22.252Z",
-    "lastBridgeConnectedAt": "2026-07-08T10:19:22.252Z"
+    "lastTransitionAt": "2026-07-08T10:22:25.308Z",
+    "lastBridgeConnectedAt": "2026-07-08T10:22:25.308Z"
   },
   "registeredAt": "2026-07-07T19:16:50.169Z",
-  "updatedAt": "2026-07-08T10:19:22.268Z"
+  "updatedAt": "2026-07-08T10:22:25.316Z"
 }
