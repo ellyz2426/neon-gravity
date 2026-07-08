@@ -1,0 +1,29 @@
+<style>
+  .panel { display: flex; flex-direction: column; align-items: center; padding: 2; background-color: rgba(5, 5, 20, 0.95); border-color: #00ffff; border-width: 0.1; border-radius: 1.5; gap: 0.8; width: 36; }
+  .title { font-size: 2; color: #00ffff; font-weight: bold; }
+  .type-row { display: flex; flex-direction: row; gap: 1; }
+  .type-btn { font-size: 1.6; color: #ffffff; background-color: rgba(0, 255, 255, 0.08); border-color: #006666; border-width: 0.06; border-radius: 0.8; padding: 0.6; padding-left: 2; padding-right: 2; cursor: pointer; }
+  .type-btn:hover { background-color: rgba(0, 255, 255, 0.25); }
+  .str-row { display: flex; flex-direction: row; gap: 1; align-items: center; }
+  .str-btn { font-size: 1.4; color: #00ffff; background-color: rgba(0, 255, 255, 0.1); border-color: #006666; border-width: 0.06; border-radius: 0.6; padding: 0.4; padding-left: 1; padding-right: 1; cursor: pointer; }
+  .str-btn:hover { background-color: rgba(0, 255, 255, 0.3); }
+  .label { font-size: 1.4; color: #aaaaaa; }
+  .value { font-size: 1.6; color: #ffaa00; font-weight: bold; }
+  .close-btn { font-size: 1.4; color: #ff6666; background-color: rgba(255, 100, 100, 0.08); border-color: #663333; border-width: 0.06; border-radius: 0.8; padding: 0.5; padding-left: 2; padding-right: 2; cursor: pointer; }
+  .close-btn:hover { background-color: rgba(255, 100, 100, 0.25); }
+</style>
+<div class="panel">
+  <span class="title">PLACE WELL</span>
+  <span id="wp-type" class="value">Attractor</span>
+  <div class="type-row">
+    <button id="btn-wp-attract" class="type-btn" cursor="pointer">Attractor</button>
+    <button id="btn-wp-repulse" class="type-btn" cursor="pointer">Repulsor</button>
+  </div>
+  <div class="str-row">
+    <span class="label">Strength:</span>
+    <button id="btn-wp-str-down" class="str-btn" cursor="pointer">-</button>
+    <span id="wp-strength" class="value">5</span>
+    <button id="btn-wp-str-up" class="str-btn" cursor="pointer">+</button>
+  </div>
+  <button id="btn-wp-close" class="close-btn" cursor="pointer">LAUNCH</button>
+</div>

@@ -1,0 +1,31 @@
+<style>
+  .panel { display: flex; flex-direction: column; align-items: center; padding: 3; background-color: rgba(5, 5, 20, 0.95); border-color: #aa44ff; border-width: 0.12; border-radius: 2; gap: 0.5; width: 52; }
+  .title { font-size: 3.5; color: #aa44ff; font-weight: bold; }
+  .count { font-size: 1.4; color: #8866aa; margin-bottom: 0.5; }
+  .row { display: flex; flex-direction: row; gap: 1; align-items: center; padding: 0.5; padding-left: 2; padding-right: 2; background-color: rgba(170, 68, 255, 0.05); border-radius: 0.5; width: 90%; }
+  .icon { font-size: 1.6; color: #aa44ff; width: 4; }
+  .name { font-size: 1.5; color: #ffffff; font-weight: bold; }
+  .desc { font-size: 1.1; color: #887799; }
+  .nav-row { display: flex; flex-direction: row; gap: 2; margin-top: 0.5; }
+  .nav-btn { font-size: 1.6; color: #aa44ff; background-color: rgba(170, 68, 255, 0.1); border-color: #553388; border-width: 0.06; border-radius: 1; padding: 0.6; padding-left: 2; padding-right: 2; cursor: pointer; }
+  .nav-btn:hover { background-color: rgba(170, 68, 255, 0.3); }
+  .back { font-size: 1.8; color: #ff6666; background-color: rgba(255, 100, 100, 0.08); border-color: #663333; border-width: 0.06; border-radius: 1; padding: 0.8; padding-left: 3; padding-right: 3; margin-top: 0.5; cursor: pointer; }
+  .back:hover { background-color: rgba(255, 100, 100, 0.25); }
+</style>
+<div class="panel">
+  <span class="title">ACHIEVEMENTS</span>
+  <span id="achv-count" class="count">0 / 40 Unlocked</span>
+  <div class="row"><span class="icon">[+]</span><span id="ach-name-1" class="name">---</span><span id="ach-desc-1" class="desc">---</span></div>
+  <div class="row"><span class="icon">[+]</span><span id="ach-name-2" class="name">---</span><span id="ach-desc-2" class="desc">---</span></div>
+  <div class="row"><span class="icon">[+]</span><span id="ach-name-3" class="name">---</span><span id="ach-desc-3" class="desc">---</span></div>
+  <div class="row"><span class="icon">[+]</span><span id="ach-name-4" class="name">---</span><span id="ach-desc-4" class="desc">---</span></div>
+  <div class="row"><span class="icon">[+]</span><span id="ach-name-5" class="name">---</span><span id="ach-desc-5" class="desc">---</span></div>
+  <div class="row"><span class="icon">[+]</span><span id="ach-name-6" class="name">---</span><span id="ach-desc-6" class="desc">---</span></div>
+  <div class="row"><span class="icon">[+]</span><span id="ach-name-7" class="name">---</span><span id="ach-desc-7" class="desc">---</span></div>
+  <div class="row"><span class="icon">[+]</span><span id="ach-name-8" class="name">---</span><span id="ach-desc-8" class="desc">---</span></div>
+  <div class="nav-row">
+    <button id="btn-achv-prev" class="nav-btn" cursor="pointer">Prev</button>
+    <button id="btn-achv-next" class="nav-btn" cursor="pointer">Next</button>
+  </div>
+  <button id="btn-achv-back" class="back" cursor="pointer">BACK</button>
+</div>
